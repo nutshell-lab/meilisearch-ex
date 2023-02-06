@@ -12,11 +12,23 @@ defmodule MeilisearchTest do
     )
   )
 
-  test "Meilisearch is running and healthy", %{meili: meili} do
-    endpoint = MeilisearchTest.MeiliContainer.connection_url(meili)
-    client = Meilisearch.Client.new(endpoint: endpoint, key: @master_key)
+  defp master_opts(meili), do: [endpoint: MeilisearchTest.MeiliContainer.connection_url(meili), key: @master_key]
 
-    healthy = Meilisearch.Health.healthy?(client)
-    assert healthy == true
+  test "Meilisearch manually instanciating a client", %{meili: meili} do
+    health = master_opts(meili)
+    |> Meilisearch.Client.new()
+    |> Meilisearch.Health.get()
+
+    assert health == {:ok, %{"status" => "available"}}
+  end
+
+  test "Meilisearch using a GenServer to retreive named client", %{meili: meili} do
+    Meilisearch.start_link(:main, master_opts(meili))
+
+    health = :main
+    |> Meilisearch.client()
+    |> Meilisearch.Health.get()
+
+    assert health == {:ok, %{"status" => "available"}}
   end
 end
