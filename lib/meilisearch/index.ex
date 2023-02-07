@@ -5,6 +5,7 @@ defmodule Meilisearch.Index do
 
   use Ecto.Schema
 
+  @primary_key false
   schema "indexes" do
     field(:uid, :string)
     field(:primaryKey, :string)
@@ -44,20 +45,14 @@ defmodule Meilisearch.Index do
 
   """
   @spec list(Tesla.Client.t(), offset: integer(), limit: integer()) ::
-          {:ok,
-           %{
-             results: list(Index.t()),
-             offśet: integer(),
-             limit: integer(),
-             total: integer()
-           }}
-          | :error
+          {:ok, Meilisearch.Pagination.t(__MODULE__.t())}
+          | {:error, map()}
   def list(client, opts \\ []) do
     with {:ok, data} <-
            client
            |> Tesla.get("/indexes", query: opts)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Map.put(data, :results, from_json(data.results))}
+      {:ok, Meilisearch.Pagination.from_json(data, &__MODULE__.from_json/1)}
     end
   end
 
@@ -77,7 +72,7 @@ defmodule Meilisearch.Index do
       }}
 
   """
-  @spec get(Tesla.Client.t(), String.t()) :: {:ok, Index.t()} | :error
+  @spec get(Tesla.Client.t(), String.t()) :: {:ok, Index.t()} | {:error, map()}
   def get(client, index_uid) do
     with {:ok, data} <-
            client
@@ -105,7 +100,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec create(Tesla.Client.t(), %{uid: String.t(), primaryKey: String.t() | nil}) ::
-          {:ok, Meilisearch.Task.t()} | :error
+          {:ok, Meilisearch.Task.t()} | {:error, map()}
   def create(client, params) do
     with {:ok, data} <-
            client
@@ -133,11 +128,13 @@ defmodule Meilisearch.Index do
 
   """
   @spec update(Tesla.Client.t(), String.t(), %{primaryKey: String.t() | nil}) ::
-          {:ok, Meilisearch.Task.t()} | :error
+          {:ok, Meilisearch.Task.t()} | {:error, map()}
   def update(client, index_uid, params) do
     with {:ok, data} <-
            client
-           |> Tesla.patch("/indexes/:index_uid", params, opts: [path_params: [index_uid: index_uid]])
+           |> Tesla.patch("/indexes/:index_uid", params,
+             opts: [path_params: [index_uid: index_uid]]
+           )
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.Task.from_json(data)}
     end
@@ -161,7 +158,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec delete(Tesla.Client.t(), String.t()) ::
-          {:ok, Meilisearch.Task.t()} | :error
+          {:ok, Meilisearch.Task.t()} | {:error, map()}
   def delete(client, index_uid) do
     with {:ok, data} <-
            client
@@ -189,7 +186,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec swap(Tesla.Client.t(), list(%{indexes: list(String.t())})) ::
-          {:ok, Meilisearch.Task.t()} | :error
+          {:ok, Meilisearch.Task.t()} | {:error, map()}
   def swap(client, params) do
     with {:ok, data} <-
            client

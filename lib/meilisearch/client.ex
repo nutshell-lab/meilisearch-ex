@@ -58,10 +58,10 @@ defmodule Meilisearch.Client do
     {:error, nil}
   end
 
-  defp string_to_atom(value) when is_atom(value), do: value
   defp string_to_atom(value) when is_binary(value), do: String.to_atom(value)
-  defp map_to_atom(value) when is_map(value) do
+  defp string_to_atom(value), do: value
+  def map_to_atom(value) when is_map(value) do
     for {key, val} <- value, into: %{}, do: {string_to_atom(key), map_to_atom(val)}
   end
-  defp map_to_atom(value), do: value
+  def map_to_atom(value), do: value
 end

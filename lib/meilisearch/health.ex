@@ -5,6 +5,7 @@ defmodule Meilisearch.Health do
 
   @doc """
   Get a response from the /health endpoint of Meilisearch.
+  [meili doc](https://docs.meilisearch.com/reference/api/health.html#get-health)
 
   ## Examples
 
@@ -13,7 +14,7 @@ defmodule Meilisearch.Health do
       {:ok, %{status: "available"}}
 
   """
-  @spec get(Tesla.Client.t()) ::  {:ok, map()} | :error
+  @spec get(Tesla.Client.t()) ::  {:ok, map()} | {:error, map()}
   def get(client) do
     client
     |> Tesla.get("/health")
@@ -22,6 +23,7 @@ defmodule Meilisearch.Health do
 
   @doc """
   Check the response from the /health endpoint of Meilisearch.
+  [meili doc](https://docs.meilisearch.com/reference/api/health.html#get-health)
 
   ## Examples
 

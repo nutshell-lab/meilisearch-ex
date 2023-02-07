@@ -36,11 +36,16 @@ defmodule MeilisearchTest do
     Meilisearch.start_link(:main, master_opts(meili))
 
     # List of indexes, should be empty
-    with {:ok, list} <-
+    with {:ok, indexes} <-
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.list(limit: 20, offset: 0) do
-      assert list == %{results: [], offset: 0, limit: 20, total: 0}
+      assert %Meilisearch.Pagination{
+               results: [],
+               offset: 0,
+               limit: 20,
+               total: 0
+             } = indexes
     else
       _ -> flunk("List index failed")
     end
@@ -50,10 +55,12 @@ defmodule MeilisearchTest do
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.create(%{uid: "movies", primaryKey: "id"}) do
-      assert task.taskUid == 0
-      assert task.indexUid == "movies"
-      assert task.status == :enqueued
-      assert task.type == :indexCreation
+      assert %Meilisearch.Task{
+               taskUid: 0,
+               indexUid: "movies",
+               status: :enqueued,
+               type: :indexCreation
+             } = task
     else
       _ -> flunk("Create index failed")
     end
@@ -66,8 +73,10 @@ defmodule MeilisearchTest do
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.get("movies") do
-      assert index.uid == "movies"
-      assert index.primaryKey == "id"
+      assert %Meilisearch.Index{
+               uid: "movies",
+               primaryKey: "id"
+             } = index
     else
       _ -> flunk("Get index failed")
     end
@@ -77,10 +86,12 @@ defmodule MeilisearchTest do
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.update("movies", %{primaryKey: "uuid"}) do
-      assert task.taskUid == 1
-      assert task.indexUid == "movies"
-      assert task.status == :enqueued
-      assert task.type == :indexUpdate
+      assert %Meilisearch.Task{
+               taskUid: 1,
+               indexUid: "movies",
+               status: :enqueued,
+               type: :indexUpdate
+             } = task
     else
       _ -> flunk("Update index failed")
     end
@@ -93,23 +104,12 @@ defmodule MeilisearchTest do
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.get("movies") do
-      assert index.uid == "movies"
-      assert index.primaryKey == "uuid"
+      assert %Meilisearch.Index{
+               uid: "movies",
+               primaryKey: "uuid"
+             } = index
     else
       _ -> flunk("Get index failed")
-    end
-
-    # Let's create an updated version of our index
-    with {:ok, task} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Index.create(%{uid: "movies_new", primaryKey: "id"}) do
-      assert task.taskUid == 2
-      assert task.indexUid == "movies_new"
-      assert task.status == :enqueued
-      assert task.type == :indexCreation
-    else
-      _ -> flunk("Create index failed")
     end
 
     # Let's delete our index
@@ -117,10 +117,12 @@ defmodule MeilisearchTest do
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.delete("movies") do
-      assert task.taskUid == 3
-      assert task.indexUid == "movies"
-      assert task.status == :enqueued
-      assert task.type == :indexDeletion
+      assert %Meilisearch.Task{
+               taskUid: 2,
+               indexUid: "movies",
+               status: :enqueued,
+               type: :indexDeletion
+             } = task
     else
       _ -> flunk("Delete index failed")
     end
@@ -131,9 +133,13 @@ defmodule MeilisearchTest do
     # Our index should be gone
     with {:error, response} <-
            :main |> Meilisearch.client() |> Meilisearch.Index.get("movies") do
-      assert response.status == 404
-      assert response.body.code == "index_not_found"
-      assert response.body.message == "Index `movies` not found."
+      assert %{
+               status: 404,
+               body: %{
+                 code: "index_not_found",
+                 message: "Index `movies` not found."
+               }
+             } = response
     else
       _ -> flunk("Update index failed")
     end

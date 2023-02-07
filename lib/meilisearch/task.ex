@@ -5,6 +5,7 @@ defmodule Meilisearch.Task do
 
   use Ecto.Schema
 
+  @primary_key false
   schema "tasks" do
     field(:taskUid, :integer)
     field(:indexUid, :string)
