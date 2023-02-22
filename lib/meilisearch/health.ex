@@ -1,7 +1,10 @@
 defmodule Meilisearch.Health do
   @moduledoc """
   Retreive Meilisearch health status.
+  [Health API](https://docs.meilisearch.com/references/health.html)
   """
+
+  @type error :: Meilisearch.Error.t() | Tesla.Error | nil
 
   use Ecto.Schema
 
@@ -31,7 +34,7 @@ defmodule Meilisearch.Health do
       {:ok, %{status: "available"}}
 
   """
-  @spec get(Tesla.Client.t()) :: {:ok, map()} | {:error, map()}
+  @spec get(Tesla.Client.t()) :: {:ok, map()} | {:error, error()}
   def get(client) do
     with {:ok, data} <-
            client

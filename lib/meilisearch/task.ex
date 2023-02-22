@@ -1,6 +1,7 @@
 defmodule Meilisearch.Task do
   @moduledoc """
-  Retreive Meilisearch health status.
+  Manipulate Meilisearch tasks.
+  [Task API](https://docs.meilisearch.com/reference/api/tasks.html)
   """
 
   use Ecto.Schema

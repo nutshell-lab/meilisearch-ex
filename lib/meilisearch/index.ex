@@ -1,7 +1,10 @@
 defmodule Meilisearch.Index do
   @moduledoc """
-  Retreive Meilisearch health status.
+  Manipulate Meilisearch indexes.
+  [Index API](https://docs.meilisearch.com/references/indexes.html)
   """
+
+  @type error :: Meilisearch.Error.t() | Tesla.Error | nil
 
   use Ecto.Schema
 
@@ -46,7 +49,7 @@ defmodule Meilisearch.Index do
   """
   @spec list(Tesla.Client.t(), offset: integer(), limit: integer()) ::
           {:ok, Meilisearch.Pagination.t(__MODULE__.t())}
-          | {:error, map()}
+          | {:error, error()}
   def list(client, opts \\ []) do
     with {:ok, data} <-
            client
@@ -72,7 +75,7 @@ defmodule Meilisearch.Index do
       }}
 
   """
-  @spec get(Tesla.Client.t(), String.t()) :: {:ok, Index.t()} | {:error, map()}
+  @spec get(Tesla.Client.t(), String.t()) :: {:ok, Index.t()} | {:error, error()}
   def get(client, index_uid) do
     with {:ok, data} <-
            client
@@ -100,7 +103,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec create(Tesla.Client.t(), %{uid: String.t(), primaryKey: String.t() | nil}) ::
-          {:ok, Meilisearch.Task.t()} | {:error, map()}
+          {:ok, Meilisearch.Task.t()} | {:error, error()}
   def create(client, params) do
     with {:ok, data} <-
            client
@@ -128,7 +131,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec update(Tesla.Client.t(), String.t(), %{primaryKey: String.t() | nil}) ::
-          {:ok, Meilisearch.Task.t()} | {:error, map()}
+          {:ok, Meilisearch.Task.t()} | {:error, error()}
   def update(client, index_uid, params) do
     with {:ok, data} <-
            client
@@ -158,7 +161,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec delete(Tesla.Client.t(), String.t()) ::
-          {:ok, Meilisearch.Task.t()} | {:error, map()}
+          {:ok, Meilisearch.Task.t()} | {:error, error()}
   def delete(client, index_uid) do
     with {:ok, data} <-
            client
@@ -186,7 +189,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec swap(Tesla.Client.t(), list(%{indexes: list(String.t())})) ::
-          {:ok, Meilisearch.Task.t()} | {:error, map()}
+          {:ok, Meilisearch.Task.t()} | {:error, error()}
   def swap(client, params) do
     with {:ok, data} <-
            client

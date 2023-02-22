@@ -1,6 +1,7 @@
 defmodule Meilisearch.Error do
   @moduledoc """
   Represents a Meilisearch error.
+  [Errors](https://docs.meilisearch.com/reference/errors/overview.html)
   """
 
   use Ecto.Schema

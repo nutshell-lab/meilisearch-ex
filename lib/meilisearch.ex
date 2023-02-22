@@ -2,7 +2,13 @@ defmodule Meilisearch do
   @moduledoc """
   A client for [MeiliSearch](https://meilisearch.com).
   The following Modules are provided for interacting with Meilisearch:
+  * `Meilisearch.Client`: Create a HTTP client to interact with Meilisearch APIs.
+  * `Meilisearch.Pagination`: Process paginated responses.
   * `Meilisearch.Health`: [Health API](https://docs.meilisearch.com/references/health.html)
+  * `Meilisearch.Index`: [Index API](https://docs.meilisearch.com/references/indexes.html)
+  * `Meilisearch.Document`: [Document API](https://docs.meilisearch.com/references/documents.html)
+  * `Meilisearch.Task`: [Document API](https://docs.meilisearch.com/references/tasks.html)
+  * `Meilisearch.Error`: [Errors](https://docs.meilisearch.com/reference/errors/overview.html)
   """
 
   use GenServer
@@ -16,8 +22,14 @@ defmodule Meilisearch do
           log_level: :info | :warn | :error
         ) ::
           :ignore | {:error, any()} | {:ok, pid()}
-  def start_link(name, opts) do
-    GenServer.start_link(__MODULE__, opts, name: to_name(name))
+  def start_link(name, opts) when is_atom(name) and is_list(opts),
+    do: start_link([name: name] ++ opts)
+
+  def start_link(opts) when is_list(opts) do
+    with {:ok, name} <- Keyword.fetch(opts, :name),
+         name <- to_name(name) do
+      GenServer.start_link(__MODULE__, opts, name: name)
+    end
   end
 
   @impl true

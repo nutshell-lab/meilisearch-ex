@@ -1,7 +1,10 @@
 defmodule Meilisearch.Document do
   @moduledoc """
-  Retreive Meilisearch health status.
+  Manipulate Meilisearch documents.
+  [Document API](https://docs.meilisearch.com/references/documents.html)
   """
+
+  @type error :: Meilisearch.Error.t() | Tesla.Error | nil
 
   @doc """
   List documents of an index of your Meilsiearch instance.
@@ -23,7 +26,7 @@ defmodule Meilisearch.Document do
           fields: list(String.t())
         ) ::
           {:ok, Meilisearch.Pagination.t(map())}
-          | {:error, map()}
+          | {:error, error()}
   def list(client, index_uid, opts \\ []) do
     with {:ok, data} <-
            client

@@ -1,6 +1,6 @@
 defmodule Meilisearch.Pagination do
   @moduledoc """
-  Meilisearch paginated response.
+  Represents a Meilisearch paginated response.
   """
 
   use Ecto.Schema

@@ -1,6 +1,64 @@
 defmodule Meilisearch.Client do
   @moduledoc """
-  Create an HTTP client to query Meilisearch.
+  Create a HTTP client to interact with Meilisearch APIs.
+
+  ## Usage
+
+  You can create a client when you needs it.
+
+      [endpoint: "https://search.mydomain.com", key: "replace_me"]
+      |> Meilisearch.Client.new()
+      |> Meilisearch.Health.get()
+
+      # %Meilisearch.Health{status: "available"}
+
+  But you can also start a client alongside your application to access it whenever you need it.
+
+      Meilisearch.start_link(:main, [endpoint: "https://search.mydomain.com", key: "replace_me"])
+      :main
+      |> Meilisearch.client()
+      |> Meilisearch.Health.get()
+
+      # %Meilisearch.Health{status: "available"}
+
+  Within a Phoenix app you would do like this:
+
+      defmodule MyApp.Application do
+        # ...
+
+        @impl true
+        def start(_type, _args) do
+          children = [
+            # ...
+            {Meilisearch, name: :search_admin, endpoint: "https://search.mydomain.com", key: "admin key"},
+            {Meilisearch, name: :search_user, endpoint: "https://search.mydomain.com", key: "user key"}
+          ]
+
+          # ...
+        end
+
+        # ...
+      end
+
+      defmodule MyApp.MyContext do
+        def create_search_index() do
+          :search_admin
+          |> Meilisearch.client()
+          |> Meilisearch.Index.create(%{uid: "items", primaryKey: "id"})
+        end
+
+        def add_document_to_search_index(document) do
+          :search_admin
+          |> Meilisearch.client()
+          |> Meilisearch.Document.index(document)
+        end
+
+        def search_document(query) do
+          :search_user
+          |> Meilisearch.client()
+          |> Meilisearch.Search.search("items", %{q: query})
+        end
+      end
   """
 
   @doc """
