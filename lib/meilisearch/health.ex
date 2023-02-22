@@ -3,6 +3,23 @@ defmodule Meilisearch.Health do
   Retreive Meilisearch health status.
   """
 
+  use Ecto.Schema
+
+  @primary_key false
+  schema "health" do
+    field(:status, :string)
+  end
+
+  @type t :: %__MODULE__{
+          status: String.t()
+        }
+
+  def from_json(data) when is_map(data) do
+    %__MODULE__{}
+    |> Ecto.Changeset.cast(data, [:status])
+    |> Ecto.Changeset.apply_changes()
+  end
+
   @doc """
   Get a response from the /health endpoint of Meilisearch.
   [meili doc](https://docs.meilisearch.com/reference/api/health.html#get-health)
@@ -14,11 +31,14 @@ defmodule Meilisearch.Health do
       {:ok, %{status: "available"}}
 
   """
-  @spec get(Tesla.Client.t()) ::  {:ok, map()} | {:error, map()}
+  @spec get(Tesla.Client.t()) :: {:ok, map()} | {:error, map()}
   def get(client) do
-    client
-    |> Tesla.get("/health")
-    |> Meilisearch.Client.handle_response()
+    with {:ok, data} <-
+           client
+           |> Tesla.get("/health")
+           |> Meilisearch.Client.handle_response() do
+      {:ok, from_json(data)}
+    end
   end
 
   @doc """

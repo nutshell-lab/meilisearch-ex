@@ -11,24 +11,32 @@ defmodule MeilisearchTest do
   test "Meilisearch manually instanciating a client" do
     {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(@image, key: @master_key))
 
-    health =
-      master_opts(meili)
-      |> Meilisearch.Client.new()
-      |> Meilisearch.Health.get()
-
-    assert health == {:ok, %{status: "available"}}
+    with {:ok, health} <-
+           master_opts(meili)
+           |> Meilisearch.Client.new()
+           |> Meilisearch.Health.get() do
+      assert %Meilisearch.Health{
+               status: "available"
+             } = health
+    else
+      _ -> flunk("Mailisearch is unavailable")
+    end
   end
 
   test "Meilisearch using a GenServer to retreive named client" do
     {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(@image, key: @master_key))
     Meilisearch.start_link(:main, master_opts(meili))
 
-    health =
-      :main
-      |> Meilisearch.client()
-      |> Meilisearch.Health.get()
-
-    assert health == {:ok, %{status: "available"}}
+    with {:ok, health} <-
+           :main
+           |> Meilisearch.client()
+           |> Meilisearch.Health.get() do
+      assert %Meilisearch.Health{
+               status: "available"
+             } = health
+    else
+      _ -> flunk("Mailisearch is unavailable")
+    end
   end
 
   test "Full tour arround the api" do
@@ -133,12 +141,12 @@ defmodule MeilisearchTest do
     # Our index should be gone
     with {:error, response} <-
            :main |> Meilisearch.client() |> Meilisearch.Index.get("movies") do
-      assert %{
+      assert %Meilisearch.Error{
                status: 404,
-               body: %{
-                 code: "index_not_found",
-                 message: "Index `movies` not found."
-               }
+               type: :invalid_request,
+               code: :index_not_found,
+               message: "Index `movies` not found.",
+               link: "https://docs.meilisearch.com/errors#index_not_found"
              } = response
     else
       _ -> flunk("Update index failed")

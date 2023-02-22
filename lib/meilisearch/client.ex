@@ -41,13 +41,11 @@ defmodule Meilisearch.Client do
 
   def handle_response({:ok, %{status: status, body: body}})
       when status in 200..299 do
-    {:ok, map_to_atom(body)}
+    {:ok, body}
   end
 
-  def handle_response({:ok, %{status: status} = response})
-      when status in 400..599 do
-    response = Map.put(response, :body, map_to_atom(response.body))
-    {:error, response}
+  def handle_response({:ok, response}) do
+    {:error, Meilisearch.Error.from_response(response)}
   end
 
   def handle_response({:error, error}) do
@@ -57,11 +55,4 @@ defmodule Meilisearch.Client do
   def handle_response(_) do
     {:error, nil}
   end
-
-  defp string_to_atom(value) when is_binary(value), do: String.to_atom(value)
-  defp string_to_atom(value), do: value
-  def map_to_atom(value) when is_map(value) do
-    for {key, val} <- value, into: %{}, do: {string_to_atom(key), map_to_atom(val)}
-  end
-  def map_to_atom(value), do: value
 end
