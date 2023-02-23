@@ -10,8 +10,8 @@ defmodule Meilisearch.Index do
   typed_schema "index", null: false do
     field(:uid, :string)
     field(:primaryKey, :string)
-    field(:createdAt, :naive_datetime)
-    field(:updatedAt, :naive_datetime)
+    field(:createdAt, :utc_datetime)
+    field(:updatedAt, :utc_datetime)
   end
 
   def from_json(data) when is_list(data), do: Enum.map(data, &from_json(&1))
@@ -33,8 +33,8 @@ defmodule Meilisearch.Index do
       {:ok, %{offset: 0, limit: 20, total: 1, results: [%{
         uid: "movies",
         primaryKey: "id",
-        createdAt: ~N[2021-08-12 10:00:00],
-        updatedAt: ~N[2021-08-12 10:00:00]
+        createdAt: ~U[2021-08-12 10:00:00],
+        updatedAt: ~U[2021-08-12 10:00:00]
       }]}}
 
   """
@@ -61,8 +61,8 @@ defmodule Meilisearch.Index do
       {:ok, %{
         uid: "movies",
         primaryKey: "id",
-        createdAt: ~N[2021-08-12 10:00:00],
-        updatedAt: ~N[2021-08-12 10:00:00]
+        createdAt: ~U[2021-08-12 10:00:00],
+        updatedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """
@@ -90,7 +90,7 @@ defmodule Meilisearch.Index do
         indexUid: "movies",
         status: :enqueued,
         type: :indexCreation,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """
@@ -118,7 +118,7 @@ defmodule Meilisearch.Index do
         indexUid: "movies",
         status: :enqueued,
         type: :indexUpdate,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """
@@ -148,7 +148,7 @@ defmodule Meilisearch.Index do
         indexUid: "movies",
         status: :enqueued,
         type: :indexDeletion,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """
@@ -176,7 +176,7 @@ defmodule Meilisearch.Index do
         indexUid: null,
         status: :enqueued,
         type: :indexSwap,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """

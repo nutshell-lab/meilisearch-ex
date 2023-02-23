@@ -78,7 +78,7 @@ defmodule Meilisearch.Document do
         indexUid: "movies",
         status: :enqueued,
         type: :documentAdditionOrUpdate,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """
@@ -111,7 +111,7 @@ defmodule Meilisearch.Document do
         indexUid: "movies",
         status: :enqueued,
         type: :documentAdditionOrUpdate,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """
@@ -144,7 +144,7 @@ defmodule Meilisearch.Document do
         indexUid: "movies",
         status: :enqueued,
         type: :documentDeletion,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """
@@ -174,7 +174,7 @@ defmodule Meilisearch.Document do
         indexUid: "movies",
         status: :enqueued,
         type: :documentDeletion,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """
@@ -204,7 +204,7 @@ defmodule Meilisearch.Document do
         indexUid: "movies",
         status: :enqueued,
         type: :documentDeletion,
-        enqueuedAt: ~N[2021-08-12 10:00:00]
+        enqueuedAt: ~U[2021-08-12 10:00:00]
       }}
 
   """

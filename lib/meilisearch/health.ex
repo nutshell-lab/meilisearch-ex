@@ -28,7 +28,7 @@ defmodule Meilisearch.Health do
       {:ok, %{status: "available"}}
 
   """
-  @spec get(Tesla.Client.t()) :: {:ok, map()} | {:error, Meilisearch.Client.error()}
+  @spec get(Tesla.Client.t()) :: {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
   def get(client) do
     with {:ok, data} <-
            client

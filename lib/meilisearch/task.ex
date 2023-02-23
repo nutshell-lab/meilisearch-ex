@@ -29,7 +29,7 @@ defmodule Meilisearch.Task do
       ]
     )
 
-    field(:enqueuedAt, :naive_datetime)
+    field(:enqueuedAt, :utc_datetime)
   end
 
   def from_json(data) when is_list(data), do: Enum.map(data, &from_json(&1))
