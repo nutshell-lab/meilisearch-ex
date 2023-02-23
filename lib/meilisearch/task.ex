@@ -12,6 +12,7 @@ defmodule Meilisearch.Task do
     field(:indexUid, :string, null: true)
 
     field(:status, Ecto.Enum, values: [:enqueued, :processing, :succeeded, :failed, :canceled])
+
     field(:type, Ecto.Enum,
       values: [
         :indexCreation,
