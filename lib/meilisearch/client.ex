@@ -84,7 +84,7 @@ defmodule Meilisearch.Client do
 
     middleware = [
       {Tesla.Middleware.BaseUrl, endpoint},
-      Tesla.Middleware.JSON,
+      {Tesla.Middleware.JSON, engine: Poison, engine_opts: [keys: :atoms]},
       Tesla.Middleware.PathParams,
       {Tesla.Middleware.BearerAuth, token: key},
       {Tesla.Middleware.Timeout, timeout: timeout},

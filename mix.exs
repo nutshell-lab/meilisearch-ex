@@ -24,7 +24,8 @@ defmodule Meilisearch.MixProject do
     [
       {:tesla, "~> 1.4"},
       {:hackney, "~> 1.16"},
-      {:jason, ">= 1.0.0"},
+      {:poison, "~> 5.0.0"},
+      #{:jason, ">= 1.0.0"},
       {:ecto, "~> 3.9"},
       {:excontainers, "~> 0.3.0", only: [:dev, :test]}
     ]
