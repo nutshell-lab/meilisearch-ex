@@ -61,6 +61,8 @@ defmodule Meilisearch.Client do
       end
   """
 
+  @type error :: Meilisearch.Error.t() | Tesla.Error | nil
+
   @doc """
   Create a new HTTP client to query Meilisearch.
 

@@ -4,14 +4,14 @@ defmodule Meilisearch.Task do
   [Task API](https://docs.meilisearch.com/reference/api/tasks.html)
   """
 
-  use Ecto.Schema
+  use TypedEctoSchema
 
   @primary_key false
-  schema "tasks" do
+  typed_schema "task", null: false do
     field(:taskUid, :integer)
-    field(:indexUid, :string)
-    field(:status, Ecto.Enum, values: [:enqueued, :processing, :succeeded, :failed, :canceled])
+    field(:indexUid, :string, null: true)
 
+    field(:status, Ecto.Enum, values: [:enqueued, :processing, :succeeded, :failed, :canceled])
     field(:type, Ecto.Enum,
       values: [
         :indexCreation,
@@ -30,25 +30,6 @@ defmodule Meilisearch.Task do
 
     field(:enqueuedAt, :naive_datetime)
   end
-
-  @type t :: %__MODULE__{
-          taskUid: integer(),
-          indexUid: String.t(),
-          status: :enqueued | :processing | :succeeded | :failed | :canceled,
-          type:
-            :indexCreation
-            | :indexUpdate
-            | :indexDeletion
-            | :indexSwap
-            | :documentAdditionOrUpdate
-            | :documentDeletion
-            | :settingsUpdate
-            | :dumpCreation
-            | :taskCancelation
-            | :taskDeletion
-            | :snapshotCreation,
-          enqueuedAt: DateTime.t()
-        }
 
   def from_json(data) when is_list(data), do: Enum.map(data, &from_json(&1))
 

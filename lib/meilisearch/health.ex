@@ -4,18 +4,12 @@ defmodule Meilisearch.Health do
   [Health API](https://docs.meilisearch.com/references/health.html)
   """
 
-  @type error :: Meilisearch.Error.t() | Tesla.Error | nil
-
-  use Ecto.Schema
+  use TypedEctoSchema
 
   @primary_key false
-  schema "health" do
+  typed_schema "health", null: false do
     field(:status, :string)
   end
-
-  @type t :: %__MODULE__{
-          status: String.t()
-        }
 
   def from_json(data) when is_map(data) do
     %__MODULE__{}
@@ -34,7 +28,7 @@ defmodule Meilisearch.Health do
       {:ok, %{status: "available"}}
 
   """
-  @spec get(Tesla.Client.t()) :: {:ok, map()} | {:error, error()}
+  @spec get(Tesla.Client.t()) :: {:ok, map()} | {:error, Meilisearch.Client.error()}
   def get(client) do
     with {:ok, data} <-
            client

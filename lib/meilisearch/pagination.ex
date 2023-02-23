@@ -3,22 +3,15 @@ defmodule Meilisearch.Pagination do
   Represents a Meilisearch paginated response.
   """
 
-  use Ecto.Schema
+  use TypedEctoSchema
 
   @primary_key false
-  schema "pagination" do
+  typed_schema "pagination", null: false do
     field(:results, {:array, :map})
     field(:offset, :integer)
     field(:limit, :integer)
     field(:total, :integer)
   end
-
-  @type t(item) :: %__MODULE__{
-          results: list(item),
-          offset: integer(),
-          limit: integer(),
-          total: integer()
-        }
 
   def from_json(data, load_items \\ fn x -> x end)
       when is_map(data) and is_function(load_items, 1) do

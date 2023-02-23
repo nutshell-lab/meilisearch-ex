@@ -4,24 +4,15 @@ defmodule Meilisearch.Index do
   [Index API](https://docs.meilisearch.com/references/indexes.html)
   """
 
-  @type error :: Meilisearch.Error.t() | Tesla.Error | nil
-
-  use Ecto.Schema
+  use TypedEctoSchema
 
   @primary_key false
-  schema "indexes" do
+  typed_schema "index", null: false do
     field(:uid, :string)
     field(:primaryKey, :string)
     field(:createdAt, :naive_datetime)
     field(:updatedAt, :naive_datetime)
   end
-
-  @type t :: %__MODULE__{
-          uid: String.t(),
-          primaryKey: String.t(),
-          createdAt: DateTime.t(),
-          updatedAt: DateTime.t()
-        }
 
   def from_json(data) when is_list(data), do: Enum.map(data, &from_json(&1))
 
@@ -49,7 +40,7 @@ defmodule Meilisearch.Index do
   """
   @spec list(Tesla.Client.t(), offset: integer(), limit: integer()) ::
           {:ok, Meilisearch.Pagination.t(__MODULE__.t())}
-          | {:error, error()}
+          | {:error, Meilisearch.Client.error()}
   def list(client, opts \\ []) do
     with {:ok, data} <-
            client
@@ -75,7 +66,8 @@ defmodule Meilisearch.Index do
       }}
 
   """
-  @spec get(Tesla.Client.t(), String.t()) :: {:ok, Index.t()} | {:error, error()}
+  @spec get(Tesla.Client.t(), String.t()) ::
+          {:ok, Index.t()} | {:error, Meilisearch.Client.error()}
   def get(client, index_uid) do
     with {:ok, data} <-
            client
@@ -92,7 +84,7 @@ defmodule Meilisearch.Index do
   ## Examples
 
       iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
-      iex> Meilisearch.Index.create(client, %{uid: "actors", primaryKey: "id"})
+      iex> Meilisearch.Index.create(client, %{uid: "movies", primaryKey: "id"})
       {:ok, %{
         taskUid: 0,
         indexUid: "movies",
@@ -103,7 +95,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec create(Tesla.Client.t(), %{uid: String.t(), primaryKey: String.t() | nil}) ::
-          {:ok, Meilisearch.Task.t()} | {:error, error()}
+          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
   def create(client, params) do
     with {:ok, data} <-
            client
@@ -120,7 +112,7 @@ defmodule Meilisearch.Index do
   ## Examples
 
       iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
-      iex> Meilisearch.Index.update(client, "actors", %{primaryKey: "id"})
+      iex> Meilisearch.Index.update(client, "movies", %{primaryKey: "id"})
       {:ok, %{
         taskUid: 0,
         indexUid: "movies",
@@ -131,7 +123,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec update(Tesla.Client.t(), String.t(), %{primaryKey: String.t() | nil}) ::
-          {:ok, Meilisearch.Task.t()} | {:error, error()}
+          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
   def update(client, index_uid, params) do
     with {:ok, data} <-
            client
@@ -150,7 +142,7 @@ defmodule Meilisearch.Index do
   ## Examples
 
       iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
-      iex> Meilisearch.Index.delete(client, "actors")
+      iex> Meilisearch.Index.delete(client, "movies")
       {:ok, %{
         taskUid: 0,
         indexUid: "movies",
@@ -161,7 +153,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec delete(Tesla.Client.t(), String.t()) ::
-          {:ok, Meilisearch.Task.t()} | {:error, error()}
+          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
   def delete(client, index_uid) do
     with {:ok, data} <-
            client
@@ -181,7 +173,7 @@ defmodule Meilisearch.Index do
       iex> Meilisearch.Index.swap(client, [%{indexes: ["movies", "actors"]}])
       {:ok, %{
         taskUid: 0,
-        indexUid: "movies",
+        indexUid: null,
         status: :enqueued,
         type: :indexSwap,
         enqueuedAt: ~N[2021-08-12 10:00:00]
@@ -189,7 +181,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec swap(Tesla.Client.t(), list(%{indexes: list(String.t())})) ::
-          {:ok, Meilisearch.Task.t()} | {:error, error()}
+          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
   def swap(client, params) do
     with {:ok, data} <-
            client

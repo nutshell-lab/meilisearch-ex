@@ -4,8 +4,6 @@ defmodule Meilisearch.Document do
   [Document API](https://docs.meilisearch.com/references/documents.html)
   """
 
-  @type error :: Meilisearch.Error.t() | Tesla.Error | nil
-
   @doc """
   List documents of an index of your Meilsiearch instance.
   [meili doc](https://docs.meilisearch.com/reference/api/documents.html#get-documents)
@@ -26,7 +24,7 @@ defmodule Meilisearch.Document do
           fields: list(String.t())
         ) ::
           {:ok, Meilisearch.Pagination.t(map())}
-          | {:error, error()}
+          | {:error, Meilisearch.Client.error()}
   def list(client, index_uid, opts \\ []) do
     with {:ok, data} <-
            client

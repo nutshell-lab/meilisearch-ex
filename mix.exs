@@ -26,6 +26,7 @@ defmodule Meilisearch.MixProject do
       {:hackney, "~> 1.16"},
       {:jason, ">= 1.0.0"},
       {:ecto, "~> 3.9"},
+      {:typed_ecto_schema, "~> 0.4.1", runtime: false},
       {:excontainers, "~> 0.3.0", only: [:dev, :test]}
     ]
   end
