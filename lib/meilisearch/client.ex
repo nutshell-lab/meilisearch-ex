@@ -46,8 +46,8 @@ defmodule Meilisearch.Client do
     {:ok, body}
   end
 
-  def handle_response({:ok, response}) do
-    {:error, Meilisearch.Error.from_response(response)}
+  def handle_response({:ok, %{status: status, body: body}}) do
+    {:error, Meilisearch.Error.from_json(body), status}
   end
 
   def handle_response({:error, error}) do

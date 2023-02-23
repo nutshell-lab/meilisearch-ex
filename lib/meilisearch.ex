@@ -29,6 +29,7 @@ defmodule Meilisearch do
   But you can also start a client alongside your application to access it whenever you need it.
 
       Meilisearch.start_link(:main, [endpoint: "https://search.mydomain.com", key: "replace_me"])
+
       :main
       |> Meilisearch.client()
       |> Meilisearch.Health.get()

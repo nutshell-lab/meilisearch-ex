@@ -8,7 +8,6 @@ defmodule Meilisearch.Error do
 
   @primary_key false
   typed_schema "error", null: false do
-    field(:status, :integer)
     field(:message, :string)
     field(:link, :string)
 
@@ -136,14 +135,7 @@ defmodule Meilisearch.Error do
 
   def from_json(data) when is_map(data) do
     %__MODULE__{}
-    |> Ecto.Changeset.cast(data, [:status, :message, :link, :type, :code])
+    |> Ecto.Changeset.cast(data, [:message, :link, :type, :code])
     |> Ecto.Changeset.apply_changes()
-  end
-
-  def from_response(%{status: status, body: body}) do
-    Map.new()
-    |> Map.merge(body)
-    |> Map.put("status", status)
-    |> from_json()
   end
 end

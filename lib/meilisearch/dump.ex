@@ -22,7 +22,7 @@ defmodule Meilisearch.Dump do
 
   """
   @spec create(Tesla.Client.t()) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def create(client) do
     with {:ok, data} <-
            client

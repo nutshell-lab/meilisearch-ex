@@ -67,7 +67,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec get(Tesla.Client.t(), String.t()) ::
-          {:ok, Index.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
   def get(client, index_uid) do
     with {:ok, data} <-
            client
@@ -95,7 +95,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec create(Tesla.Client.t(), %{uid: String.t(), primaryKey: String.t() | nil}) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def create(client, params) do
     with {:ok, data} <-
            client
@@ -123,7 +123,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec update(Tesla.Client.t(), String.t(), %{primaryKey: String.t() | nil}) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def update(client, index_uid, params) do
     with {:ok, data} <-
            client
@@ -153,7 +153,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec delete(Tesla.Client.t(), String.t()) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def delete(client, index_uid) do
     with {:ok, data} <-
            client
@@ -181,7 +181,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec swap(Tesla.Client.t(), list(%{indexes: list(String.t())})) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def swap(client, params) do
     with {:ok, data} <-
            client

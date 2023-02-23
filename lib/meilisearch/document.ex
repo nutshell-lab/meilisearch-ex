@@ -83,7 +83,7 @@ defmodule Meilisearch.Document do
 
   """
   @spec create_or_replace(Tesla.Client.t(), String.t(), list(__MODULE__.t()) | __MODULE__.t()) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def create_or_replace(client, index_uid, params) when not is_list(params),
     do: create_or_replace(client, index_uid, [params])
 
@@ -116,7 +116,7 @@ defmodule Meilisearch.Document do
 
   """
   @spec create_or_update(Tesla.Client.t(), String.t(), list(__MODULE__.t()) | __MODULE__.t()) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def create_or_update(client, index_uid, params) when not is_list(params),
     do: create_or_update(client, index_uid, [params])
 
@@ -149,7 +149,7 @@ defmodule Meilisearch.Document do
 
   """
   @spec delete_all(Tesla.Client.t(), String.t()) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def delete_all(client, index_uid) do
     with {:ok, data} <-
            client
@@ -179,7 +179,7 @@ defmodule Meilisearch.Document do
 
   """
   @spec delete_one(Tesla.Client.t(), String.t(), document_id()) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def delete_one(client, index_uid, document_id) do
     with {:ok, data} <-
            client
@@ -209,7 +209,7 @@ defmodule Meilisearch.Document do
 
   """
   @spec delete_batch(Tesla.Client.t(), String.t(), list(document_id())) ::
-          {:ok, Meilisearch.Task.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def delete_batch(client, index_uid, document_ids) do
     with {:ok, data} <-
            client

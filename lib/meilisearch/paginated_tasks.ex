@@ -1,28 +1,22 @@
-defmodule Meilisearch.Pagination do
+defmodule Meilisearch.PaginatedTasks do
   @moduledoc """
   Represents a Meilisearch paginated response.
   """
 
-  use Ecto.Schema
+  use TypedEctoSchema
+
   @primary_key false
-  schema "pagination" do
-    field(:results, {:array, :map})
-    field(:offset, :integer)
+  typed_schema "pagination", null: false do
+    field(:results, {:array, :map}) :: list(Meilisearch.Task.t())
     field(:limit, :integer)
-    field(:total, :integer)
+    field(:from, :integer)
+    field(:next, :integer, null: true)
   end
 
-  @type t(item) :: %__MODULE__{
-    results: list(item),
-    offset: integer(),
-    limit: integer(),
-    total: integer()
-  }
-
-  def from_json(data, load_items \\ fn x -> x end)
+  def from_json(data, load_items \\ fn x -> Meilisearch.Task.from_json(x) end)
       when is_map(data) and is_function(load_items, 1) do
     %__MODULE__{}
-    |> Ecto.Changeset.cast(data, [:results, :offset, :limit, :total])
+    |> Ecto.Changeset.cast(data, [:results, :limit, :from, :next])
     |> cast_results(load_items)
     |> Ecto.Changeset.apply_changes()
   end

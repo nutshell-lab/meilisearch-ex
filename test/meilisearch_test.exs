@@ -139,15 +139,15 @@ defmodule MeilisearchTest do
     :timer.sleep(1000)
 
     # Our index should be gone
-    with {:error, response} <-
+    with {:error, error, status} <-
            :main |> Meilisearch.client() |> Meilisearch.Index.get("movies") do
+      assert 404 = status
       assert %Meilisearch.Error{
-               status: 404,
                type: :invalid_request,
                code: :index_not_found,
                message: "Index `movies` not found.",
                link: "https://docs.meilisearch.com/errors#index_not_found"
-             } = response
+             } = error
     else
       _ -> flunk("Update index failed")
     end
