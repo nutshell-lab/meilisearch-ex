@@ -14,9 +14,9 @@ defmodule Meilisearch.Index do
     field(:updatedAt, :utc_datetime)
   end
 
-  def from_json(data) when is_list(data), do: Enum.map(data, &from_json(&1))
+  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
 
-  def from_json(data) when is_map(data) do
+  def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:uid, :primaryKey, :createdAt, :updatedAt])
     |> Ecto.Changeset.apply_changes()
@@ -46,7 +46,7 @@ defmodule Meilisearch.Index do
            client
            |> Tesla.get("/indexes", query: opts)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Pagination.from_json(data, &__MODULE__.from_json/1)}
+      {:ok, Meilisearch.Pagination.cast(data, &__MODULE__.cast/1)}
     end
   end
 
@@ -73,7 +73,7 @@ defmodule Meilisearch.Index do
            client
            |> Tesla.get("/indexes/:index_uid", opts: [path_params: [index_uid: index_uid]])
            |> Meilisearch.Client.handle_response() do
-      {:ok, from_json(data)}
+      {:ok, cast(data)}
     end
   end
 
@@ -101,12 +101,12 @@ defmodule Meilisearch.Index do
            client
            |> Tesla.post("/indexes", params)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 
   @doc """
-  Update a new Index in your Meilsiearch instance.
+  Update an existing Index in your Meilsiearch instance.
   [meili doc](https://docs.meilisearch.com/reference/api/indexes.html#update-an-index)
 
   ## Examples
@@ -131,12 +131,12 @@ defmodule Meilisearch.Index do
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 
   @doc """
-  Delete a new Index in your Meilsiearch instance.
+  Delete an existing Index in your Meilsiearch instance.
   [meili doc](https://docs.meilisearch.com/reference/api/indexes.html#delete-an-index)
 
   ## Examples
@@ -159,7 +159,7 @@ defmodule Meilisearch.Index do
            client
            |> Tesla.delete("/indexes/:index_uid", opts: [path_params: [index_uid: index_uid]])
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 
@@ -187,7 +187,7 @@ defmodule Meilisearch.Index do
            client
            |> Tesla.post("/swap-indexes", params)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 end

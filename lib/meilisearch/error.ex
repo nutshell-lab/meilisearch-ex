@@ -131,9 +131,9 @@ defmodule Meilisearch.Error do
     )
   end
 
-  def from_json(data) when is_list(data), do: Enum.map(data, &from_json(&1))
+  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
 
-  def from_json(data) when is_map(data) do
+  def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:message, :link, :type, :code])
     |> Ecto.Changeset.apply_changes()

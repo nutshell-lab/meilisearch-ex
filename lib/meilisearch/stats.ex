@@ -1,2 +1,140 @@
 defmodule Meilisearch.Stats do
+  @moduledoc """
+  Get Stats about your Meilisearch indexes.
+  [Key API](https://docs.meilisearch.com/reference/api/stats.html)
+  """
+
+  use Ecto.Schema
+
+  @primary_key false
+  schema "stats" do
+    field(:databaseSize, :integer)
+    field(:lastUpdate, :utc_datetime)
+    field(:indexes, :map)
+  end
+
+  @type t() :: %__MODULE__{
+          databaseSize: integer(),
+          lastUpdate: DateTime.t(),
+          indexes: %{
+            String.t() => Meilisearch.Stats.Stat.t()
+          }
+        }
+
+  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
+
+  def cast(data) when is_map(data) do
+    %__MODULE__{}
+    |> Ecto.Changeset.cast(data, [:databaseSize, :lastUpdate, :indexes])
+    |> Ecto.Changeset.apply_changes()
+  end
+
+  @doc """
+  Get stats about all indexes of your Meilsiearch instance.
+  [meili doc](https://docs.meilisearch.com/reference/api/stats.html#get-stats-of-all-indexes)
+
+  ## Examples
+
+      iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
+      iex> Meilisearch.Stats.all(client)
+      {:ok, %{
+        databaseSize: 447819776,
+        lastUpdate: ~U[2021-08-12 10:00:00],
+        indexes: %{
+          "movies" => %{
+            numberOfDocuments: 19654,
+            isIndexing: false,
+            fieldDistribution: %{
+              "poster" => 19654,
+              "overview" => 19654,
+              "title" => 19654,
+              "id" => 19654,
+              "release_date" => 19654
+            }
+          },
+          "books" => %{
+            numberOfDocuments: 5,
+            isIndexing: false,
+            fieldDistribution: %{
+              "id" => 5,
+              "title" => 5,
+              "author" => 5,
+              "price" => 5,
+              "genres" => 5
+            }
+          }
+        }
+      }}
+
+  """
+  @spec list(Tesla.Client.t(), offset: integer(), limit: integer()) ::
+          {:ok, __MODULE__.t()}
+          | {:error, Meilisearch.Client.error()}
+  def list(client, opts \\ []) do
+    with {:ok, data} <-
+           client
+           |> Tesla.get("/stats", query: opts)
+           |> Meilisearch.Client.handle_response() do
+      {:ok, cast(data)}
+    end
+  end
+
+  @doc """
+  Get stats about a specific index of your Meilsiearch instance.
+  [meili doc](https://docs.meilisearch.com/reference/api/stats.html#get-stats-of-an-index)
+
+  ## Examples
+
+      iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
+      iex> Meilisearch.Stats.get(client, "movies")
+      {:ok, %{
+        numberOfDocuments: 19654,
+        isIndexing: false,
+        fieldDistribution: &{
+          "poster" => 19654,
+          "release_date" => 19654,
+          "title" => 19654,
+          "id" => 19654,
+          "overview" => 19654
+        }
+      }}
+
+  """
+  @spec get(Tesla.Client.t(), String.t()) ::
+          {:ok, Meilisearch.Stats.Stat.t()} | {:error, Meilisearch.Client.error()}
+  def get(client, index_uid) do
+    with {:ok, data} <-
+           client
+           |> Tesla.get("/indexes/:index_uid/stats", opts: [path_params: [index_uid: index_uid]])
+           |> Meilisearch.Client.handle_response() do
+      {:ok, Meilisearch.Stats.Stat.cast(data)}
+    end
+  end
+end
+
+defmodule Meilisearch.Stats.Stat do
+  use Ecto.Schema
+
+  @primary_key false
+  schema "stat" do
+    field(:numberOfDocuments, :integer)
+    field(:isIndexing, :boolean)
+    field(:fieldDistribution, :map)
+  end
+
+  @type t() :: %__MODULE__{
+          numberOfDocuments: integer(),
+          isIndexing: boolean(),
+          fieldDistribution: %{
+            String.t() => integer()
+          }
+        }
+
+  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
+
+  def cast(data) when is_map(data) do
+    %__MODULE__{}
+    |> Ecto.Changeset.cast(data, [:numberOfDocuments, :isIndexing, :fieldDistribution])
+    |> Ecto.Changeset.apply_changes()
+  end
 end

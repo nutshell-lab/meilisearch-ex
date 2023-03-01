@@ -11,7 +11,7 @@ defmodule Meilisearch.Health do
     field(:status, :string)
   end
 
-  def from_json(data) when is_map(data) do
+  def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:status])
     |> Ecto.Changeset.apply_changes()
@@ -34,7 +34,7 @@ defmodule Meilisearch.Health do
            client
            |> Tesla.get("/health")
            |> Meilisearch.Client.handle_response() do
-      {:ok, from_json(data)}
+      {:ok, cast(data)}
     end
   end
 

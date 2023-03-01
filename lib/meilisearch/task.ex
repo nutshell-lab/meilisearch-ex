@@ -85,9 +85,9 @@ defmodule Meilisearch.Task do
     field(:finishedAt, :utc_datetime)
   end
 
-  def from_json(data) when is_list(data), do: Enum.map(data, &from_json(&1))
+  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
 
-  def from_json(data) when is_map(data) do
+  def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [
       :taskUid,
@@ -144,7 +144,7 @@ defmodule Meilisearch.Task do
            client
            |> Tesla.get("/tasks", query: opts)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.PaginatedTasks.from_json(data)}
+      {:ok, Meilisearch.PaginatedTasks.cast(data)}
     end
   end
 
@@ -187,7 +187,7 @@ defmodule Meilisearch.Task do
            client
            |> Tesla.get("/tasks/:task_uid", opts: [path_params: [task_uid: task_uid]])
            |> Meilisearch.Client.handle_response() do
-      {:ok, from_json(data)}
+      {:ok, cast(data)}
     end
   end
 
@@ -227,7 +227,7 @@ defmodule Meilisearch.Task do
            client
            |> Tesla.post("/tasks/cancel", query: opts)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.PaginatedTasks.from_json(data)}
+      {:ok, Meilisearch.PaginatedTasks.cast(data)}
     end
   end
 
@@ -268,7 +268,7 @@ defmodule Meilisearch.Task do
            client
            |> Tesla.delete("/tasks", query: opts)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.PaginatedTasks.from_json(data)}
+      {:ok, Meilisearch.PaginatedTasks.cast(data)}
     end
   end
 end

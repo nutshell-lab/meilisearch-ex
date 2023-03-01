@@ -13,7 +13,7 @@ defmodule Meilisearch.Version do
     field(:pkgVersion, :string)
   end
 
-  def from_json(data) when is_map(data) do
+  def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:commitSha, :commitDate, :pkgVersion])
     |> Ecto.Changeset.apply_changes()
@@ -40,7 +40,7 @@ defmodule Meilisearch.Version do
            client
            |> Tesla.get("/version")
            |> Meilisearch.Client.handle_response() do
-      {:ok, from_json(data)}
+      {:ok, cast(data)}
     end
   end
 end

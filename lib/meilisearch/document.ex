@@ -37,7 +37,7 @@ defmodule Meilisearch.Document do
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Pagination.from_json(data)}
+      {:ok, Meilisearch.Pagination.cast(data)}
     end
   end
 
@@ -94,7 +94,7 @@ defmodule Meilisearch.Document do
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 
@@ -127,7 +127,7 @@ defmodule Meilisearch.Document do
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 
@@ -157,7 +157,7 @@ defmodule Meilisearch.Document do
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 
@@ -187,7 +187,7 @@ defmodule Meilisearch.Document do
              opts: [path_params: [index_uid: index_uid, document_id: document_id]]
            )
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 
@@ -219,7 +219,7 @@ defmodule Meilisearch.Document do
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 end

@@ -13,7 +13,7 @@ defmodule Meilisearch.PaginatedTasks do
     field(:next, :integer, null: true)
   end
 
-  def from_json(data, load_items \\ fn x -> Meilisearch.Task.from_json(x) end)
+  def cast(data, load_items \\ fn x -> Meilisearch.Task.cast(x) end)
       when is_map(data) and is_function(load_items, 1) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:results, :limit, :from, :next])

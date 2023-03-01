@@ -19,17 +19,16 @@ defmodule Meilisearch.Pagination do
     total: integer()
   }
 
-  def from_json(data, load_items \\ fn x -> x end)
-      when is_map(data) and is_function(load_items, 1) do
+  def cast(data, caster \\ fn x -> x end)
+      when is_map(data) and is_function(caster, 1) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:results, :offset, :limit, :total])
-    |> cast_results(load_items)
+    |> cast_results(caster)
     |> Ecto.Changeset.apply_changes()
   end
 
-  defp cast_results(changeset, loader) do
+  defp cast_results(changeset, caster) do
     results = Ecto.Changeset.get_change(changeset, :results, [])
-    results = loader.(results)
-    Ecto.Changeset.put_change(changeset, :results, results)
+    Ecto.Changeset.put_change(changeset, :results, caster.(results))
   end
 end

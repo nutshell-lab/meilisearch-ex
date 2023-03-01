@@ -28,7 +28,7 @@ defmodule Meilisearch.Dump do
            client
            |> Tesla.post("/indexes", %{})
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.from_json(data)}
+      {:ok, Meilisearch.Task.cast(data)}
     end
   end
 end
