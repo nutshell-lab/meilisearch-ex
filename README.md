@@ -2,7 +2,7 @@
   <img width="400" height="62" src="meilisearch-ex.png">
 </p>
 
-A [Meilisearch](https://www.meilisearch.com/) client based on [Tesla](https://github.com/elixir-tesla/tesla) HTTP client.
+An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [Tesla](https://github.com/elixir-tesla/tesla) HTTP client.
 
 ## Installation
 
