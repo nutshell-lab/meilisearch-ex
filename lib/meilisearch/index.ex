@@ -101,7 +101,7 @@ defmodule Meilisearch.Index do
            client
            |> Tesla.post("/indexes", params)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.cast(data)}
+      {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
   end
 
@@ -131,7 +131,7 @@ defmodule Meilisearch.Index do
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.cast(data)}
+      {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
   end
 
@@ -159,7 +159,7 @@ defmodule Meilisearch.Index do
            client
            |> Tesla.delete("/indexes/:index_uid", opts: [path_params: [index_uid: index_uid]])
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.cast(data)}
+      {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
   end
 
@@ -187,7 +187,7 @@ defmodule Meilisearch.Index do
            client
            |> Tesla.post("/swap-indexes", params)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.cast(data)}
+      {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
   end
 end

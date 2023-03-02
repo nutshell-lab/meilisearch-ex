@@ -42,11 +42,7 @@ defmodule Meilisearch.Client do
   end
 
   @doc """
-  Handles responses sucess and errors, returns it into a formated way.
-
-  Meilisearch uses a limited [set of status codes](https://docs.meilisearch.com/reference/errors/overview.html#errors).
-  - Sucessful ones are 200, 201, 202, 204, 205
-  - Unsuccessful ones are 400, 401, 403, 404
+  Handles responses sucess and errors, returns it formated.
   """
   def handle_response({:ok, %{status: status, body: body}})
       when status in 200..299 do

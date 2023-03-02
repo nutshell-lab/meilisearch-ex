@@ -63,7 +63,7 @@ defmodule MeilisearchTest do
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.create(%{uid: "movies", primaryKey: "id"}) do
-      assert %Meilisearch.Task{
+      assert %Meilisearch.SummarizedTask{
                taskUid: 0,
                indexUid: "movies",
                status: :enqueued,
@@ -94,7 +94,7 @@ defmodule MeilisearchTest do
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.update("movies", %{primaryKey: "uuid"}) do
-      assert %Meilisearch.Task{
+      assert %Meilisearch.SummarizedTask{
                taskUid: 1,
                indexUid: "movies",
                status: :enqueued,
@@ -125,7 +125,7 @@ defmodule MeilisearchTest do
            :main
            |> Meilisearch.client()
            |> Meilisearch.Index.delete("movies") do
-      assert %Meilisearch.Task{
+      assert %Meilisearch.SummarizedTask{
                taskUid: 2,
                indexUid: "movies",
                status: :enqueued,
