@@ -62,10 +62,10 @@ defmodule Meilisearch do
           |> Meilisearch.Index.create(%{uid: "items", primaryKey: "id"})
         end
 
-        def add_document_to_search_index(document) do
+        def add_documents_to_search_index(documents) do
           :search_admin
           |> Meilisearch.client()
-          |> Meilisearch.Document.create_or_replace("items", document)
+          |> Meilisearch.Document.create_or_replace("items", documents)
         end
 
         def search_document(query) do

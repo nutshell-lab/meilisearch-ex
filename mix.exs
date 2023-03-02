@@ -8,7 +8,11 @@ defmodule Meilisearch.MixProject do
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      docs: [
+        main: "Meilisearch-ex",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -27,7 +31,8 @@ defmodule Meilisearch.MixProject do
       {:jason, ">= 1.0.0"},
       {:ecto, "~> 3.9"},
       {:typed_ecto_schema, "~> 0.4.1", runtime: false},
-      {:excontainers, "~> 0.3.0", only: [:dev, :test]}
+      {:excontainers, "~> 0.3.0", only: [:dev, :test]},
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false}
     ]
   end
 

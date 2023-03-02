@@ -2,7 +2,7 @@ defmodule MeilisearchTest do
   use ExUnit.Case, async: true
   import Excontainers.ExUnit
 
-  @image "getmeili/meilisearch:v1.0.0"
+  @image "getmeili/meilisearch:v1.0.2"
   @master_key "master_key_test"
 
   defp master_opts(meili),
