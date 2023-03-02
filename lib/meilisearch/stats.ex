@@ -26,7 +26,18 @@ defmodule Meilisearch.Stats do
   def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:databaseSize, :lastUpdate, :indexes])
+    |> cast_indexes()
     |> Ecto.Changeset.apply_changes()
+  end
+
+  defp cast_indexes(changeset) do
+    indexes =
+      changeset
+      |> Ecto.Changeset.get_change(:indexes, %{})
+      |> Enum.map(fn {k, v} -> {k, Meilisearch.Stats.Stat.cast(v)} end)
+      |> Enum.into(%{})
+
+    Ecto.Changeset.put_change(changeset, :indexes, indexes)
   end
 
   @doc """

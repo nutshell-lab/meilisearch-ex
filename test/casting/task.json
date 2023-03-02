@@ -1,0 +1,20 @@
+{
+    "uid": 4,
+    "indexUid" :"movie",
+    "status": "failed",
+    "type": "indexDeletion",
+    "canceledBy": null,
+    "details": {
+        "deletedDocuments": 0
+    },
+    "error": {
+        "message": "Index `movie` not found.",
+        "code": "index_not_found",
+        "type": "invalid_request",
+        "link": "https://docs.meilisearch.com/errors#index_not_found"
+    },
+    "duration": "PT0.001192S",
+    "enqueuedAt": "2022-08-04T12:28:15.159167Z",
+    "startedAt": "2022-08-04T12:28:15.161996Z",
+    "finishedAt": "2022-08-04T12:28:15.163188Z"
+}

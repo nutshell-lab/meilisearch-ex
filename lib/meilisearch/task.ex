@@ -8,7 +8,7 @@ defmodule Meilisearch.Task do
 
   @primary_key false
   typed_schema "task", null: false do
-    field(:taskUid, :integer)
+    field(:uid, :integer)
     field(:indexUid, :string, null: true)
 
     field(:status, Ecto.Enum, values: [:enqueued, :processing, :succeeded, :failed, :canceled])
@@ -30,54 +30,7 @@ defmodule Meilisearch.Task do
     )
 
     field(:canceledBy, :integer, null: true)
-
-    field(:details, :map) ::
-      %{
-        receivedDocuments: integer(),
-        indexedDocuments: integer() | nil
-      }
-      | %{
-          providedIds: integer(),
-          deletedDocuments: integer() | nil
-        }
-      | %{
-          primaryKey: Meilisearch.Document.document_id() | nil
-        }
-      | %{
-          deletedDocuments: integer() | nil
-        }
-      | %{
-          swaps: list(%{indexes: list(Meilisearch.Document.document_id())})
-        }
-      | %{
-          rankingRules: list(String.t()),
-          filterableAttributes: list(String.t()),
-          distinctAttribute: String.t(),
-          searchableAttributes: list(String.t()),
-          displayedAttributes: list(String.t()),
-          sortableAttributes: list(String.t()),
-          stopWords: list(String.t()),
-          synonyms: %{String.t() => list(String.t())},
-          typoTolerance: %{
-            enabled: boolean(),
-            minWordSizeForTypos: %{
-              oneTypo: integer(),
-              twoTypos: integer()
-            },
-            disableOnWords: list(Strig.t()),
-            disableOnAttributes: list(Strig.t())
-          }
-        }
-      | %{
-          dumpUid: integer() | nil
-        }
-      | %{
-          matchedTasks: integer(),
-          canceledTasks: integer() | nil,
-          originalFilter: map()
-        }
-      | nil
-
+    field(:details, :map, null: true)
     field(:error, :map) :: Meilisearch.Error.t()
     field(:duration, :string)
     field(:enqueuedAt, :utc_datetime)
@@ -90,7 +43,7 @@ defmodule Meilisearch.Task do
   def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [
-      :taskUid,
+      :uid,
       :indexUid,
       :status,
       :type,
@@ -98,12 +51,21 @@ defmodule Meilisearch.Task do
       :details,
       :error,
       :duration,
-      :canceledBy,
-      :canceledBy,
+      :enqueuedAt,
       :startedAt,
       :finishedAt
     ])
+    |> cast_error()
     |> Ecto.Changeset.apply_changes()
+  end
+
+  defp cast_error(changeset) do
+    error =
+      changeset
+      |> Ecto.Changeset.get_change(:error, nil)
+      |> Meilisearch.Error.cast()
+
+    Ecto.Changeset.put_change(changeset, :error, error)
   end
 
   @doc """
@@ -162,8 +124,8 @@ defmodule Meilisearch.Task do
         status: :succeeded,
         type: :settingsUpdate,
         canceledBy: nil,
-        details: {
-          rankingRules: [
+        details: %{
+          "rankingRules" => [
             "typo",
             "ranking:desc",
             "words",
