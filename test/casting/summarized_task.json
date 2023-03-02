@@ -1,0 +1,7 @@
+{
+    "taskUid": 4,
+    "indexUid" :"movie",
+    "status": "failed",
+    "type": "indexDeletion",
+    "enqueuedAt": "2022-08-04T12:28:15.159167Z"
+}

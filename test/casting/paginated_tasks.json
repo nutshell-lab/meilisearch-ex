@@ -1,0 +1,39 @@
+{
+    "results": [
+        {
+            "uid": 1,
+            "indexUid": "movies_reviews",
+            "status": "failed",
+            "type": "documentAdditionOrUpdate",
+            "canceledBy": null,
+            "details": {
+                "receivedDocuments": 100,
+                "indexedDocuments": 0
+            },
+            "error": null,
+            "duration": null,
+            "enqueuedAt": "2021-08-12T10:00:00.000000Z",
+            "startedAt": null,
+            "finishedAt": null
+        },
+        {
+            "uid": 0,
+            "indexUid": "movies",
+            "status": "succeeded",
+            "type": "documentAdditionOrUpdate",
+            "canceledBy": null,
+            "details": {
+                "receivedDocuments": 100,
+                "indexedDocuments": 100
+            },
+            "error": null,
+            "duration": "PT16S",
+            "enqueuedAt": "2021-08-11T09:25:53.000000Z",
+            "startedAt": "2021-08-11T10:03:00.000000Z",
+            "finishedAt": "2021-08-11T10:03:16.000000Z"
+        }
+    ],
+    "limit": 20,
+    "from": 1,
+    "next": null
+}
