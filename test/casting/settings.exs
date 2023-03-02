@@ -14,7 +14,7 @@ defmodule MeilisearchTest.Casting.Settings do
              rankingRules: ["words", "typo", "proximity", "attribute", "sort", "exactness"],
              stopWords: [],
              synonyms: %{},
-             distinctAttribute: null,
+             distinctAttribute: nil,
              typoTolerance: %{
                enabled: true,
                minWordSizeForTypos: %{
