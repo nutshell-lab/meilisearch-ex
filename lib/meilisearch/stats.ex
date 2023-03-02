@@ -78,10 +78,10 @@ defmodule Meilisearch.Stats do
       }}
 
   """
-  @spec list(Tesla.Client.t(), offset: integer(), limit: integer()) ::
+  @spec all(Tesla.Client.t(), offset: integer(), limit: integer()) ::
           {:ok, __MODULE__.t()}
           | {:error, Meilisearch.Client.error()}
-  def list(client, opts \\ []) do
+  def all(client, opts \\ []) do
     with {:ok, data} <-
            client
            |> Tesla.get("/stats", query: opts)
@@ -121,31 +121,31 @@ defmodule Meilisearch.Stats do
       {:ok, Meilisearch.Stats.Stat.cast(data)}
     end
   end
-end
 
-defmodule Meilisearch.Stats.Stat do
-  use Ecto.Schema
+  defmodule Stat do
+    use Ecto.Schema
 
-  @primary_key false
-  schema "stat" do
-    field(:numberOfDocuments, :integer)
-    field(:isIndexing, :boolean)
-    field(:fieldDistribution, :map)
-  end
+    @primary_key false
+    schema "stat" do
+      field(:numberOfDocuments, :integer)
+      field(:isIndexing, :boolean)
+      field(:fieldDistribution, :map)
+    end
 
-  @type t() :: %__MODULE__{
-          numberOfDocuments: integer(),
-          isIndexing: boolean(),
-          fieldDistribution: %{
-            String.t() => integer()
+    @type t() :: %__MODULE__{
+            numberOfDocuments: integer(),
+            isIndexing: boolean(),
+            fieldDistribution: %{
+              String.t() => integer()
+            }
           }
-        }
 
-  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
+    def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
 
-  def cast(data) when is_map(data) do
-    %__MODULE__{}
-    |> Ecto.Changeset.cast(data, [:numberOfDocuments, :isIndexing, :fieldDistribution])
-    |> Ecto.Changeset.apply_changes()
+    def cast(data) when is_map(data) do
+      %__MODULE__{}
+      |> Ecto.Changeset.cast(data, [:numberOfDocuments, :isIndexing, :fieldDistribution])
+      |> Ecto.Changeset.apply_changes()
+    end
   end
 end

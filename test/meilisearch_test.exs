@@ -142,6 +142,7 @@ defmodule MeilisearchTest do
     with {:error, error, status} <-
            :main |> Meilisearch.client() |> Meilisearch.Index.get("movies") do
       assert 404 = status
+
       assert %Meilisearch.Error{
                type: :invalid_request,
                code: :index_not_found,

@@ -7,11 +7,10 @@ defmodule MeilisearchTest.Casting.Index do
     casted = Meilisearch.Index.cast(json)
 
     assert %Meilisearch.Index{
-      uid: "movies",
-      createdAt: ~U[2022-02-10T07:45:15Z],
-      updatedAt: ~U[2022-02-21T15:28:43Z],
-      primaryKey: "id"
-    }
-      = casted
+             uid: "movies",
+             createdAt: ~U[2022-02-10T07:45:15Z],
+             updatedAt: ~U[2022-02-21T15:28:43Z],
+             primaryKey: "id"
+           } = casted
   end
 end

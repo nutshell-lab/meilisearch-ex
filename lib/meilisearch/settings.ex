@@ -11,9 +11,9 @@ defmodule Meilisearch.Settings do
     field(:stopWords, {:array, :string})
     field(:synonyms, :map)
     field(:distinctAttribute, :string, null: true)
-    field(:typoTolerance, :map)
-    field(:faceting, :map)
-    field(:pagination, :map)
+    embeds_one(:typoTolerance, __MODULE__.TypeTolerence)
+    embeds_one(:faceting, __MODULE__.Faceting)
+    embeds_one(:pagination, __MODULE__.Pagination)
   end
 
   def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
@@ -28,11 +28,11 @@ defmodule Meilisearch.Settings do
       :rankingRules,
       :stopWords,
       :synonyms,
-      :distinctAttribute,
-      :typoTolerance,
-      :faceting,
-      :pagination
+      :distinctAttribute
     ])
+    |> Ecto.Changeset.cast_embed(:typoTolerance)
+    |> Ecto.Changeset.cast_embed(:faceting)
+    |> Ecto.Changeset.cast_embed(:pagination)
     |> Ecto.Changeset.apply_changes()
   end
 
@@ -57,9 +57,98 @@ defmodule Meilisearch.Settings do
   def all(client, index_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/indexes/:index_uid/settings", opts: [path_params: [index_uid: index_uid]])
+           |> Tesla.get("/indexes/:index_uid/settings",
+             opts: [path_params: [index_uid: index_uid]]
+           )
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
+    end
+  end
+
+  defmodule Pagination do
+    use TypedEctoSchema
+
+    @primary_key false
+    typed_schema "settings_pagination", null: false do
+      field(:maxTotalHits, :integer)
+    end
+
+    def changeset(mod \\ %__MODULE__{}, data),
+      do: Ecto.Changeset.cast(mod, data, [:maxTotalHits])
+
+    def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
+
+    def cast(data) when is_map(data) do
+      %__MODULE__{}
+      |> changeset(data)
+      |> Ecto.Changeset.apply_changes()
+    end
+  end
+
+  defmodule Faceting do
+    use TypedEctoSchema
+
+    @primary_key false
+    typed_schema "settings_faceting", null: false do
+      field(:maxValuesPerFacet, :integer)
+    end
+
+    def changeset(mod \\ %__MODULE__{}, data),
+      do: Ecto.Changeset.cast(mod, data, [:maxValuesPerFacet])
+
+    def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
+
+    def cast(data) when is_map(data) do
+      %__MODULE__{}
+      |> changeset(data)
+      |> Ecto.Changeset.apply_changes()
+    end
+  end
+
+  defmodule TypeTolerence do
+    use TypedEctoSchema
+
+    @primary_key false
+    typed_schema "settings_typo_tolerence", null: false do
+      field(:enabled, :boolean)
+      field(:disableOnWords, {:array, :string})
+      field(:disableOnAttributes, {:array, :string})
+      embeds_one(:minWordSizeForTypos, __MODULE__.MinWordSizesForTypos)
+    end
+
+    def changeset(mod \\ %__MODULE__{}, data) do
+      mod
+      |> Ecto.Changeset.cast(data, [:enabled, :disableOnWords, :disableOnAttributes])
+      |> Ecto.Changeset.cast_embed(:minWordSizeForTypos)
+    end
+
+    def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
+
+    def cast(data) when is_map(data) do
+      %__MODULE__{}
+      |> changeset(data)
+      |> Ecto.Changeset.apply_changes()
+    end
+
+    defmodule MinWordSizesForTypos do
+      use TypedEctoSchema
+
+      @primary_key false
+      typed_schema "settings_typo_tolerence", null: false do
+        field(:oneTypo, :integer)
+        field(:twoTypos, :integer)
+      end
+
+      def changeset(mod \\ %__MODULE__{}, data),
+        do: Ecto.Changeset.cast(mod, data, [:oneTypo, :twoTypos])
+
+      def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
+
+      def cast(data) when is_map(data) do
+        %__MODULE__{}
+        |> changeset(data)
+        |> Ecto.Changeset.apply_changes()
+      end
     end
   end
 end

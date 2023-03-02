@@ -13,11 +13,11 @@ defmodule Meilisearch.Pagination do
   end
 
   @type t(item) :: %__MODULE__{
-    results: list(item),
-    offset: integer(),
-    limit: integer(),
-    total: integer()
-  }
+          results: list(item),
+          offset: integer(),
+          limit: integer(),
+          total: integer()
+        }
 
   def cast(data, caster \\ fn x -> x end)
       when is_map(data) and is_function(caster, 1) do
