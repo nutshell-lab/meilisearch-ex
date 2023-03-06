@@ -31,7 +31,7 @@ defmodule Meilisearch.MixProject do
 
   defp package do
     [
-      name: "meilisearch_ex-ex",
+      name: "meilisearch_ex",
       licenses: ["MIT"],
       links: %{
         "Meilisearch" => "https://www.meilisearch.com/",
