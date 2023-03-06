@@ -6,13 +6,18 @@ defmodule MeilisearchTest do
     defstruct [:uuid, :title, :director, :genres]
   end
 
-  @image "getmeili/meilisearch:v1.0.2"
+  @meiliversion "1.0.2"
+  @image "getmeili/meilisearch:v#{@meiliversion}"
   @master_key "master_key_test"
 
   defp master_opts(meili),
-    do: [endpoint: MeilisearchTest.MeiliContainer.connection_url(meili), key: @master_key]
+    do: [
+      endpoint: MeilisearchTest.MeiliContainer.connection_url(meili),
+      key: @master_key,
+      debug: false
+    ]
 
-  def wait_for_task(client, taskUid, backoff \\ 1_000) do
+  def wait_for_task(client, taskUid, backoff \\ 500) do
     case Meilisearch.Task.get(client, taskUid) do
       {:error, error} ->
         {:error, error}
@@ -32,31 +37,33 @@ defmodule MeilisearchTest do
     end
   end
 
+  test "Meilisearch unhealthy client" do
+    refute [
+             endpoint: "https://non_existsnt_domain",
+             key: "dummy",
+             timeout: 1_000
+           ]
+           |> Meilisearch.Client.new()
+           |> Meilisearch.Health.healthy?()
+  end
+
   test "Meilisearch manually instanciating a client" do
     {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(@image, key: @master_key))
 
-    with healthy <-
-           master_opts(meili)
-           |> Meilisearch.Client.new()
-           |> Meilisearch.Health.healthy?() do
-      assert true = healthy
-    else
-      _ -> flunk("Mailisearch is unavailable")
-    end
+    assert true =
+             master_opts(meili)
+             |> Meilisearch.Client.new()
+             |> Meilisearch.Health.healthy?()
   end
 
   test "Meilisearch using a GenServer to retreive named client" do
     {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(@image, key: @master_key))
     Meilisearch.start_link(:main, master_opts(meili))
 
-    with healthy <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Health.healthy?() do
-      assert true = healthy
-    else
-      _ -> flunk("Mailisearch is unavailable")
-    end
+    assert true =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Health.healthy?()
   end
 
   test "Full tour arround the api" do
@@ -64,221 +71,756 @@ defmodule MeilisearchTest do
     Meilisearch.start_link(:main, master_opts(meili))
 
     # Instance should be healthy
-    with healthy <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Health.healthy?() do
-      assert true = healthy
-    else
-      _ -> flunk("Mailisearch is unavailable")
-    end
+    assert true =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Health.healthy?()
 
-    # Instance should be of 1.0.2
-    with {:ok, version} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Version.get() do
-      assert %Meilisearch.Version{
-               pkgVersion: "1.0.2"
-             } = version
-    else
-      _ -> flunk("Mailisearch is unavailable")
-    end
+    assert {:ok, %{status: "available"}} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Health.get()
+
+    # Instance should be of @meiliversion
+    assert {:ok,
+            %Meilisearch.Version{
+              pkgVersion: @meiliversion
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Version.get()
 
     # List of indexes, should be empty
-    with {:ok, indexes} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Index.list(limit: 20, offset: 0) do
-      assert %Meilisearch.Pagination{
-               results: [],
-               offset: 0,
-               limit: 20,
-               total: 0
-             } = indexes
-    else
-      _ -> flunk("List index failed")
-    end
+    assert {:ok,
+            %Meilisearch.Pagination{
+              results: [],
+              offset: 0,
+              limit: 20,
+              total: 0
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.list(limit: 20, offset: 0)
 
     # Creating an index, a task should be enqueued
-    with {:ok, task} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Index.create(%{uid: "movies", primaryKey: "id"}) do
-      assert %Meilisearch.SummarizedTask{
-               taskUid: 0,
-               indexUid: "movies",
-               status: :enqueued,
-               type: :indexCreation
-             } = task
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :indexCreation
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.create(%{uid: "movies", primaryKey: "id"})
 
-      assert :succeeded = wait_for_task(Meilisearch.client(:main), task.taskUid)
-    else
-      _ -> flunk("Create index failed")
-    end
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
     # Index should be created
-    with {:ok, index} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Index.get("movies") do
-      assert %Meilisearch.Index{
-               uid: "movies",
-               primaryKey: "id"
-             } = index
-    else
-      _ -> flunk("Get index failed")
-    end
+    assert {:ok,
+            %Meilisearch.Index{
+              uid: "movies",
+              primaryKey: "id"
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.get("movies")
 
     # Let's update the index
-    with {:ok, task} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Index.update("movies", %{primaryKey: "uuid"}) do
-      assert %Meilisearch.SummarizedTask{
-               taskUid: _,
-               indexUid: "movies",
-               status: :enqueued,
-               type: :indexUpdate
-             } = task
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :indexUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.update("movies", %{primaryKey: "uuid"})
 
-      assert :succeeded = wait_for_task(Meilisearch.client(:main), task.taskUid)
-    else
-      _ -> flunk("Update index failed")
-    end
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
     # Index should be updated
-    with {:ok, index} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Index.get("movies") do
-      assert %Meilisearch.Index{
-               uid: "movies",
-               primaryKey: "uuid"
-             } = index
-    else
-      _ -> flunk("Get index failed")
-    end
+    assert {:ok,
+            %Meilisearch.Index{
+              uid: "movies",
+              primaryKey: "uuid"
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.get("movies")
 
     require Protocol
     Protocol.derive(Jason.Encoder, Movie)
 
     # Let's insert some documents
-    with {:ok, task} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Document.create_or_replace("movies", [
-             %Movie{uuid: 1, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]},
-             %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["commedy", "polar"]}
-           ]) do
-      assert %Meilisearch.SummarizedTask{
-               taskUid: _,
-               indexUid: "movies",
-               status: :enqueued,
-               type: :documentAdditionOrUpdate
-             } = task
-
-      assert :succeeded = wait_for_task(Meilisearch.client(:main), task.taskUid)
-    else
-      _ -> flunk("Document insertion failed")
-    end
-
-    # Let's search
-    with {:ok, search} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Search.search("movies", %{q: "flat"}) do
-      assert %Meilisearch.Search{
-               query: "flat",
-               hits: [
-                 %{
-                   "uuid" => 1,
-                   "title" => "Flatman",
-                   "director" => "Roberto",
-                   "genres" => ["sf", "drama"]
-                 }
-               ]
-             } = search
-    else
-      _ -> flunk("Search failed")
-    end
-
-    # Creating an index, and cancel the task
-    big_list_of_movies = 5..5_000
-    |> Enum.to_list()
-    |> Enum.map(fn i -> %Movie{uuid: i, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]} end)
-
-    with {:ok, task} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Document.create_or_replace("movies", big_list_of_movies),
-         {:ok, cancelation_task} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Task.cancel(uids: "#{task.taskUid}") do
-      assert %Meilisearch.SummarizedTask{
-               taskUid: _,
-               indexUid: "movies",
-               status: :enqueued,
-               type: :documentAdditionOrUpdate
-             } = task
-
-      assert %Meilisearch.SummarizedTask{
-               taskUid: _,
-               indexUid: nil,
-               status: :enqueued,
-               type: :taskCancelation
-             } = cancelation_task
-
-      assert :succeeded = wait_for_task(Meilisearch.client(:main), cancelation_task.taskUid)
-
-      with {:ok, canceled_task} <-
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :documentAdditionOrUpdate
+            }} =
              :main
              |> Meilisearch.client()
-             |> Meilisearch.Task.get(task.taskUid) do
-        assert %Meilisearch.Task{
-                 uid: _,
-                 indexUid: "movies",
-                 status: :canceled,
-                 type: :documentAdditionOrUpdate
-               } = canceled_task
-      else
-        _ -> flunk("Task cancelation failed")
-      end
-    else
-      _ -> flunk("Task cancelation failed")
-    end
+             |> Meilisearch.Document.create_or_replace("movies", [
+               %Movie{uuid: 1, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]},
+               %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["commedy", "polar"]}
+             ])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    # Let's search
+    assert {:ok,
+            %Meilisearch.Search{
+              query: "flat",
+              hits: [
+                %{
+                  "uuid" => 1,
+                  "title" => "Flatman",
+                  "director" => "Roberto",
+                  "genres" => ["sf", "drama"]
+                }
+              ]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Search.search("movies", %{q: "flat"})
+
+    # Check default settings
+    assert {:ok,
+            %Meilisearch.Settings{
+              displayedAttributes: ["*"],
+              searchableAttributes: ["*"],
+              filterableAttributes: [],
+              sortableAttributes: [],
+              rankingRules: ["words", "typo", "proximity", "attribute", "sort", "exactness"],
+              stopWords: [],
+              synonyms: %{},
+              distinctAttribute: nil,
+              typoTolerance: %{
+                enabled: true,
+                minWordSizeForTypos: %{
+                  oneTypo: 5,
+                  twoTypos: 9
+                },
+                disableOnWords: [],
+                disableOnAttributes: []
+              },
+              faceting: %{
+                maxValuesPerFacet: 100
+              },
+              pagination: %{
+                maxTotalHits: 1000
+              }
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.get("movies")
+
+    # Update some settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.DistinctAttributes.update("movies", "uuid")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, "uuid"} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.DistinctAttributes.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.DistinctAttributes.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, nil} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.DistinctAttributes.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.DisplayedAttributes.update("movies", [
+               "uuid",
+               "title",
+               "director"
+             ])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["uuid", "title", "director"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.DisplayedAttributes.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.DisplayedAttributes.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["*"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.DisplayedAttributes.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.SearchableAttributes.update("movies", [
+               "title",
+               "director"
+             ])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["title", "director"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.SearchableAttributes.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.SearchableAttributes.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["*"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.SearchableAttributes.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.FilterableAttributes.update("movies", [
+               "director",
+               "genres"
+             ])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["director", "genres"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.FilterableAttributes.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.FilterableAttributes.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, []} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.FilterableAttributes.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.SortableAttributes.update("movies", ["title"])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["title"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.SortableAttributes.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.SortableAttributes.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, []} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.SortableAttributes.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Faceting.update("movies", %{maxValuesPerFacet: 20})
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, %{maxValuesPerFacet: 20}} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Faceting.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Faceting.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, %{maxValuesPerFacet: 100}} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Faceting.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Pagination.update("movies", %{maxTotalHits: 50})
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, %{maxTotalHits: 50}} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Pagination.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Pagination.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, %{maxTotalHits: 1_000}} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Pagination.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.TypeTolerence.update("movies", %{
+               enabled: true,
+               minWordSizeForTypos: %{
+                 oneTypo: 6,
+                 twoTypos: 12
+               },
+               disableOnWords: ["skrek"],
+               disableOnAttributes: ["uuid"]
+             })
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %{
+              enabled: true,
+              minWordSizeForTypos: %{
+                oneTypo: 6,
+                twoTypos: 12
+              },
+              disableOnWords: ["skrek"],
+              disableOnAttributes: ["uuid"]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.TypeTolerence.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.TypeTolerence.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %{
+              enabled: true,
+              minWordSizeForTypos: %{
+                oneTypo: 5,
+                twoTypos: 9
+              },
+              disableOnWords: [],
+              disableOnAttributes: []
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.TypeTolerence.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Synonyms.update("movies", %{
+               "wolverine" => ["logan", "xmen"],
+               "logan" => ["wolverine", "xmen"],
+               "wow" => ["world of warcraft"]
+             })
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %{
+              "wolverine" => ["logan", "xmen"],
+              "logan" => ["wolverine", "xmen"],
+              "wow" => ["world of warcraft"]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Synonyms.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Synonyms.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, %{}} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.Synonyms.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.StopWords.update("movies", ["of", "the", "to"])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["of", "the", "to"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.StopWords.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.StopWords.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, []} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.StopWords.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.RankingRules.update("movies", [
+               "words",
+               "typo",
+               "proximity",
+               "attribute",
+               "sort",
+               "exactness",
+               "title:asc"
+             ])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["words", "typo", "proximity", "attribute", "sort", "exactness", "title:asc"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.RankingRules.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.RankingRules.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok, ["words", "typo", "proximity", "attribute", "sort", "exactness"]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.RankingRules.get("movies")
+
+    # -- next settings
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.update("movies", %{
+               rankingRules: [
+                 "words",
+                 "typo",
+                 "proximity",
+                 "attribute",
+                 "sort",
+                 "exactness",
+                 "title:asc"
+               ]
+             })
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %{
+              rankingRules: [
+                "words",
+                "typo",
+                "proximity",
+                "attribute",
+                "sort",
+                "exactness",
+                "title:asc"
+              ]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.get("movies")
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :settingsUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.reset("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %{
+              rankingRules: [
+                "words",
+                "typo",
+                "proximity",
+                "attribute",
+                "sort",
+                "exactness"
+              ]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Settings.get("movies")
+
+    # Insert a lot of documents and cancel the task
+    big_list_of_movies =
+      5..5_000
+      |> Enum.to_list()
+      |> Enum.map(fn i ->
+        %Movie{uuid: i, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]}
+      end)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task_to_cancel,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :documentAdditionOrUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.create_or_replace("movies", big_list_of_movies)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: cancelation_task,
+              indexUid: nil,
+              status: :enqueued,
+              type: :taskCancelation
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Task.cancel(uids: "#{task_to_cancel}")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), cancelation_task)
+
+    assert {:ok,
+            %Meilisearch.Task{
+              uid: _,
+              indexUid: "movies",
+              status: :canceled,
+              type: :documentAdditionOrUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Task.get(task_to_cancel)
+
+    assert {:ok,
+            %Meilisearch.Task{
+              uid: _,
+              indexUid: nil,
+              status: :succeeded,
+              type: :taskCancelation
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Task.get(cancelation_task)
 
     # Let's delete our index
-    with {:ok, task} <-
-           :main
-           |> Meilisearch.client()
-           |> Meilisearch.Index.delete("movies") do
-      assert %Meilisearch.SummarizedTask{
-               taskUid: _,
-               indexUid: "movies",
-               status: :enqueued,
-               type: :indexDeletion
-             } = task
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :indexDeletion
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.delete("movies")
 
-      assert :succeeded = wait_for_task(Meilisearch.client(:main), task.taskUid)
-    else
-      _ -> flunk("Delete index failed")
-    end
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
     # Our index should be gone
-    with {:error, error, status} <-
-           :main |> Meilisearch.client() |> Meilisearch.Index.get("movies") do
-      assert 404 = status
-
-      assert %Meilisearch.Error{
-               type: :invalid_request,
-               code: :index_not_found,
-               message: "Index `movies` not found.",
-               link: "https://docs.meilisearch.com/errors#index_not_found"
-             } = error
-    else
-      _ -> flunk("Update index failed")
-    end
+    assert {:error,
+            %Meilisearch.Error{
+              type: :invalid_request,
+              code: :index_not_found,
+              message: "Index `movies` not found.",
+              link: "https://docs.meilisearch.com/errors#index_not_found"
+            }, 404} = :main |> Meilisearch.client() |> Meilisearch.Index.get("movies")
   end
 end

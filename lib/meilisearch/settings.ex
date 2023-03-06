@@ -556,7 +556,7 @@ defmodule Meilisearch.Settings do
             {:ok, list(String.t())} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/ranking-rules",
+      |> Tesla.get("/indexes/:index_uid/settings/stop-words",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -584,7 +584,7 @@ defmodule Meilisearch.Settings do
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/ranking-rules", params,
+             |> Tesla.put("/indexes/:index_uid/settings/stop-words", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -614,7 +614,7 @@ defmodule Meilisearch.Settings do
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/ranking-rules",
+             |> Tesla.delete("/indexes/:index_uid/settings/stop-words",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -716,8 +716,8 @@ defmodule Meilisearch.Settings do
 
   defmodule DistinctAttributes do
     @doc """
-    Get distinct attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attributes)
+    Get distinct attribute settings of an Index of your Meilsiearch instance.
+    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attribute)
 
     ## Examples
 
@@ -730,15 +730,15 @@ defmodule Meilisearch.Settings do
             {:ok, String.t()} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/distinct-attributes",
+      |> Tesla.get("/indexes/:index_uid/settings/distinct-attribute",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
     end
 
     @doc """
-    Update distinct attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-distinct-attributes)
+    Update distinct attribute settings of an Index of your Meilsiearch instance.
+    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-distinct-attribute)
 
     ## Examples
 
@@ -758,7 +758,10 @@ defmodule Meilisearch.Settings do
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/distinct-attributes", params,
+             # Tesla encodes "uuid" to uuid instead of "\"uuid\""
+             |> Tesla.put(
+               "/indexes/:index_uid/settings/distinct-attribute",
+               params |> Jason.encode!(),
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -767,8 +770,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset distinct attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attributes)
+    Reset distinct attribute settings of an Index of your Meilsiearch instance.
+    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attribute)
 
     ## Examples
 
@@ -788,7 +791,7 @@ defmodule Meilisearch.Settings do
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/distinct-attributes",
+             |> Tesla.delete("/indexes/:index_uid/settings/distinct-attribute",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -862,7 +865,7 @@ defmodule Meilisearch.Settings do
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/faceting", params,
+             |> Tesla.patch("/indexes/:index_uid/settings/faceting", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -966,7 +969,7 @@ defmodule Meilisearch.Settings do
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/pagination", params,
+             |> Tesla.patch("/indexes/:index_uid/settings/pagination", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -1092,7 +1095,7 @@ defmodule Meilisearch.Settings do
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/typo-tolerance", params,
+             |> Tesla.patch("/indexes/:index_uid/settings/typo-tolerance", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
