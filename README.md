@@ -14,6 +14,7 @@ by adding `meilisearch_ex` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
+    {:finch, "~> 0.14.0"},
     {:meilisearch_ex, "~> 1.0.0"}
   ]
 end
@@ -28,7 +29,11 @@ be found at <https://hexdocs.pm/meilisearch-ex>.
 You can create a client when you needs it.
 
 ```elixir
-[endpoint: "https://search.mydomain.com", key: "replace_me"]
+# Start finch with your app
+Finch.start_link(name: MeiliFinch)
+
+# Create a Meilisearch client whenever and wherever you need it.
+[endpoint: "https://search.mydomain.com", key: "replace_me", finch: MeiliFinch]
 |> Meilisearch.Client.new()
 |> Meilisearch.Health.get()
 
@@ -38,7 +43,12 @@ You can create a client when you needs it.
 But you can also start a client alongside your application to access it whenever you need it.
 
 ```elixir
-Meilisearch.start_link(:main, [endpoint: "https://search.mydomain.com", key: "replace_me"])
+Finch.start_link(name: MeiliFinch)
+Meilisearch.start_link(:main, [
+  endpoint: "https://search.mydomain.com",
+  key: "replace_me",
+  finch: MeiliFinch
+])
 
 :main
 |> Meilisearch.client()
@@ -57,8 +67,9 @@ defmodule MyApp.Application do
   def start(_type, _args) do
     children = [
       # ...
-      {Meilisearch, name: :search_admin, endpoint: "https://search.mydomain.com", key: "key_admin"},
-      {Meilisearch, name: :search_user, endpoint: "https://search.mydomain.com", key: "key_user"}
+      {Finch, name: MeiliFinch},
+      {Meilisearch, name: :search_admin, endpoint: "https://search.mydomain.com", key: "key_admin", finch: MeiliFinch},
+      {Meilisearch, name: :search_public, endpoint: "https://search.mydomain.com", key: "key_public", finch: MeiliFinch}
     ]
 
     # ...
@@ -81,7 +92,7 @@ defmodule MyApp.MyContext do
   end
 
   def search_document(query) do
-    :search_user
+    :search_public
     |> Meilisearch.client()
     |> Meilisearch.Search.search("items", %{q: query})
   end

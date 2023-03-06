@@ -91,9 +91,8 @@ defmodule Meilisearch do
     do: start_link([name: name] ++ opts)
 
   def start_link(opts) when is_list(opts) do
-    with {:ok, name} <- Keyword.fetch(opts, :name),
-         name <- to_name(name) do
-      GenServer.start_link(__MODULE__, opts, name: name)
+    with {:ok, name} <- Keyword.fetch(opts, :name) do
+      GenServer.start_link(__MODULE__, opts, name: to_name(name))
     end
   end
 

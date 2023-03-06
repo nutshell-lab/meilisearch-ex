@@ -28,9 +28,9 @@ defmodule Meilisearch.MixProject do
   defp deps do
     [
       {:tesla, "~> 1.4"},
-      {:hackney, "~> 1.16"},
       {:jason, ">= 1.0.0"},
       {:ecto, "~> 3.9"},
+      {:finch, "~> 0.14.0", only: [:dev, :test]},
       {:typed_ecto_schema, "~> 0.4.1", runtime: false},
       {:excontainers, "~> 0.3.0", only: [:dev, :test]},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false}

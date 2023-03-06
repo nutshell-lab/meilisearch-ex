@@ -14,12 +14,15 @@ defmodule MeilisearchTest do
 
     {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(image, key: key))
 
+    Finch.start_link(name: MeiliFinch)
+
     [
       version: version,
       meili: [
         endpoint: MeilisearchTest.MeiliContainer.connection_url(meili),
         key: key,
-        debug: false
+        debug: false,
+        finch: MeiliFinch
       ]
     ]
   end
@@ -48,7 +51,8 @@ defmodule MeilisearchTest do
     refute [
              endpoint: "https://non_existsnt_domain",
              key: "dummy",
-             timeout: 1_000
+             timeout: 1_000,
+             finch: MeiliFinch
            ]
            |> Meilisearch.Client.new()
            |> Meilisearch.Health.healthy?()
