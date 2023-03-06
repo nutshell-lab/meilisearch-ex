@@ -52,7 +52,7 @@ defmodule Meilisearch.MixProject do
     [
       {:tesla, "~> 1.4"},
       {:jason, ">= 1.0.0"},
-      {:ecto, "~> 3.9"},
+      {:ecto, ">= 3.7.0 and < 4.0.0"},
       {:finch, "~> 0.14.0", only: [:dev, :test]},
       {:typed_ecto_schema, "~> 0.4.1", runtime: false},
       {:excontainers, "~> 0.3.0", only: [:dev, :test]},
