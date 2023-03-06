@@ -126,6 +126,23 @@ defmodule MeilisearchTest do
              |> Meilisearch.client()
              |> Meilisearch.Index.get("movies")
 
+    # List of indexes, should NOT be empty
+    assert {:ok,
+            %Meilisearch.Pagination{
+              results: [
+                %{
+                  uid: "movies",
+                  primaryKey: "id"
+                }
+              ],
+              offset: 0,
+              limit: 20,
+              total: 1
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.list(limit: 20, offset: 0)
+
     # Let's update the index
     assert {:ok,
             %Meilisearch.SummarizedTask{
@@ -170,6 +187,41 @@ defmodule MeilisearchTest do
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
+    # Let's get stats about our index
+    assert {:ok,
+            %{
+              numberOfDocuments: 2,
+              isIndexing: false,
+              fieldDistribution: %{
+                "director" => 2,
+                "genres" => 2,
+                "title" => 2,
+                "uuid" => 2
+              }
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Stats.get("movies")
+
+    assert {:ok,
+            %{
+              indexes: %{
+                "movies" => %{
+                  numberOfDocuments: 2,
+                  isIndexing: false,
+                  fieldDistribution: %{
+                    "director" => 2,
+                    "genres" => 2,
+                    "title" => 2,
+                    "uuid" => 2
+                  }
+                }
+              }
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Stats.all()
+
     # Let's search
     assert {:ok,
             %Meilisearch.Search{
@@ -186,6 +238,97 @@ defmodule MeilisearchTest do
              :main
              |> Meilisearch.client()
              |> Meilisearch.Search.search("movies", %{q: "flat"})
+
+    # Let's list all our documents
+    assert {:ok,
+            %{
+              offset: 0,
+              limit: 2,
+              total: 2,
+              results: [
+                %{
+                  "uuid" => 1,
+                  "title" => "Flatman",
+                  "director" => "Roberto",
+                  "genres" => ["sf", "drama"]
+                },
+                %{
+                  "uuid" => 2,
+                  "title" => "Superbat",
+                  "director" => "Rico",
+                  "genres" => ["commedy", "polar"]
+                }
+              ]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.list("movies", limit: 2)
+
+    assert {:ok,
+            %{
+              "uuid" => 2,
+              "title" => "Superbat",
+              "director" => "Rico",
+              "genres" => ["commedy", "polar"]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.get("movies", 2)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :documentDeletion
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.delete_one("movies", 2)
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :documentDeletion
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.delete_batch("movies", [1])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :documentAdditionOrUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.create_or_update("movies", [
+               %Movie{uuid: 1, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]},
+               %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["commedy", "polar"]}
+             ])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :documentDeletion
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.delete_all("movies")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
     # Check default settings
     assert {:ok,
@@ -822,5 +965,17 @@ defmodule MeilisearchTest do
               message: "Index `movies` not found.",
               link: "https://docs.meilisearch.com/errors#index_not_found"
             }, 404} = :main |> Meilisearch.client() |> Meilisearch.Index.get("movies")
+
+    # Dump our sweet instance
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: _,
+              indexUid: nil,
+              status: :enqueued,
+              type: :dumpCreation
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Dump.create()
   end
 end

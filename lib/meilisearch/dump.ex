@@ -26,9 +26,9 @@ defmodule Meilisearch.Dump do
   def create(client) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/indexes", %{})
+           |> Tesla.post("/dumps", %{})
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.Task.cast(data)}
+      {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
   end
 end
