@@ -4,6 +4,9 @@
 
 An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [Tesla](https://github.com/elixir-tesla/tesla) HTTP client.
 
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nutshell-lab/meilisearch-ex/elixir.yml)
+![GitHub](https://img.shields.io/github/license/nutshell-lab/meilisearch-ex)
+
 ## Installation
 
 :warning Not published to hex yet, I still need to do some real world tests.
