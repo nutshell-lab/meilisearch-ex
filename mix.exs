@@ -17,7 +17,7 @@ defmodule Meilisearch.MixProject do
       package: package(),
       docs: [
         main: "readme",
-        name: "meilisearch-ex",
+        name: "meilisearch_ex",
         source_ref: "v#{@version}",
         source_url: @github_url,
         extras: ["README.md"]
@@ -31,8 +31,7 @@ defmodule Meilisearch.MixProject do
 
   defp package do
     [
-      name: "meilisearch-ex",
-      organization: "nutshell_lab",
+      name: "meilisearch_ex-ex",
       licenses: ["MIT"],
       links: %{
         "Meilisearch" => "https://www.meilisearch.com/",
