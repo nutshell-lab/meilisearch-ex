@@ -6,7 +6,7 @@ defmodule Meilisearch.MixProject do
 
   def project do
     [
-      app: :meilisearch,
+      app: :meilisearch_ex,
       version: @version,
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
