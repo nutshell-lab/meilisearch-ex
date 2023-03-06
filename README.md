@@ -30,10 +30,10 @@ You can create a client when you needs it.
 
 ```elixir
 # Start finch with your app
-Finch.start_link(name: MeiliFinch)
+Finch.start_link(name: :search_finch)
 
 # Create a Meilisearch client whenever and wherever you need it.
-[endpoint: "https://search.mydomain.com", key: "replace_me", finch: MeiliFinch]
+[endpoint: "https://search.mydomain.com", key: "replace_me", finch: :search_finch]
 |> Meilisearch.Client.new()
 |> Meilisearch.Health.get()
 
@@ -43,11 +43,11 @@ Finch.start_link(name: MeiliFinch)
 But you can also start a client alongside your application to access it whenever you need it.
 
 ```elixir
-Finch.start_link(name: MeiliFinch)
+Finch.start_link(name: :search_finch)
 Meilisearch.start_link(:main, [
   endpoint: "https://search.mydomain.com",
   key: "replace_me",
-  finch: MeiliFinch
+  finch: :search_finch
 ])
 
 :main
@@ -67,9 +67,9 @@ defmodule MyApp.Application do
   def start(_type, _args) do
     children = [
       # ...
-      {Finch, name: MeiliFinch},
-      {Meilisearch, name: :search_admin, endpoint: "https://search.mydomain.com", key: "key_admin", finch: MeiliFinch},
-      {Meilisearch, name: :search_public, endpoint: "https://search.mydomain.com", key: "key_public", finch: MeiliFinch}
+      {Finch, name: :search_finch},
+      {Meilisearch, name: :search_admin, endpoint: "https://search.mydomain.com", key: "key_admin", finch: :search_finch},
+      {Meilisearch, name: :search_public, endpoint: "https://search.mydomain.com", key: "key_public", finch: :search_finch}
     ]
 
     # ...
