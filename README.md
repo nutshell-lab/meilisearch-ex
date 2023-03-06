@@ -6,13 +6,11 @@ An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [T
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nutshell-lab/meilisearch-ex/elixir.yml)
 ![GitHub](https://img.shields.io/github/license/nutshell-lab/meilisearch-ex)
+![Hex.pm](https://img.shields.io/hexpm/v/meilisearch_ex)
 
 ## Installation
 
-:warning Not published to hex yet, I still need to do some real world tests.
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `meilisearch_ex` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `meilisearch_ex` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -23,9 +21,7 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/meilisearch-ex>.
+Documentation can be found at <https://hexdocs.pm/meilisearch_ex>.
 
 ## Usage
 
