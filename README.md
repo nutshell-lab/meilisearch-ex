@@ -6,13 +6,15 @@ An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [T
 
 ## Installation
 
+:warning Not published to hex yet, I still need to do some real world tests.
+
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `meilisearch_ex` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:meilisearch_ex, "~> 0.1.0"}
+    {:meilisearch_ex, "~> 1.0.0"}
   ]
 end
 ```
