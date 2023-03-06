@@ -1,25 +1,43 @@
 defmodule Meilisearch.MixProject do
   use Mix.Project
 
+  @version "1.0.0"
+  @github_url "https://github.com/nutshell-lab/meilisearch-ex"
+
   def project do
     [
       app: :meilisearch,
-      version: "1.0.0",
+      version: @version,
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
       consolidate_protocols: Mix.env() != :test,
-
-      name: "Meilisearch-Ex",
-      organization: "nutshell_lab",
-      licenses: ["MIT"],
-      source_url: "https://github.com/nutshell-lab/meilisearch-ex",
-      homepage_url: "https://github.com/nutshell-lab/meilisearch-ex",
+      description: description(),
+      package: package(),
       docs: [
-        main: "Meilisearch-Ex",
+        main: "readme",
+        name: "meilisearch-ex",
+        source_ref: "v#{@version}",
+        source_url: @github_url,
         extras: ["README.md"]
       ]
+    ]
+  end
+
+  defp description do
+    "An unofficial Meilisearch client based on Tesla HTTP client."
+  end
+
+  defp package do
+    [
+      name: "meilisearch-ex",
+      organization: "nutshell_lab",
+      licenses: ["MIT"],
+      links: %{
+        "Meilisearch" => "https://www.meilisearch.com/",
+        "Meilisearch documentation" => "https://docs.meilisearch.com/"
+      }
     ]
   end
 
