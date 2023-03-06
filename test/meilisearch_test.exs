@@ -6,16 +6,23 @@ defmodule MeilisearchTest do
     defstruct [:uuid, :title, :director, :genres]
   end
 
-  @meiliversion "1.0.2"
-  @image "getmeili/meilisearch:v#{@meiliversion}"
-  @master_key "master_key_test"
+  setup do
+    # Used in CI to test multiple versions of Meilisearch
+    version = System.get_env("MEILI", "1.0.2")
+    image = "getmeili/meilisearch:v#{version}"
+    key = "master_key_test"
 
-  defp master_opts(meili),
-    do: [
-      endpoint: MeilisearchTest.MeiliContainer.connection_url(meili),
-      key: @master_key,
-      debug: false
+    {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(image, key: key))
+
+    [
+      version: version,
+      meili: [
+        endpoint: MeilisearchTest.MeiliContainer.connection_url(meili),
+        key: key,
+        debug: false
+      ]
     ]
+  end
 
   def wait_for_task(client, taskUid, backoff \\ 500) do
     case Meilisearch.Task.get(client, taskUid) do
@@ -37,7 +44,7 @@ defmodule MeilisearchTest do
     end
   end
 
-  test "Meilisearch unhealthy client" do
+  test "Meilisearch unhealthy client", _context do
     refute [
              endpoint: "https://non_existsnt_domain",
              key: "dummy",
@@ -47,18 +54,15 @@ defmodule MeilisearchTest do
            |> Meilisearch.Health.healthy?()
   end
 
-  test "Meilisearch manually instanciating a client" do
-    {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(@image, key: @master_key))
-
+  test "Meilisearch manually instanciating a client", context do
     assert true =
-             master_opts(meili)
+             context[:meili]
              |> Meilisearch.Client.new()
              |> Meilisearch.Health.healthy?()
   end
 
-  test "Meilisearch using a GenServer to retreive named client" do
-    {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(@image, key: @master_key))
-    Meilisearch.start_link(:main, master_opts(meili))
+  test "Meilisearch using a GenServer to retreive named client", context do
+    Meilisearch.start_link(:main, context[:meili])
 
     assert true =
              :main
@@ -66,9 +70,8 @@ defmodule MeilisearchTest do
              |> Meilisearch.Health.healthy?()
   end
 
-  test "Full tour arround the api" do
-    {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(@image, key: @master_key))
-    Meilisearch.start_link(:main, master_opts(meili))
+  test "Full tour arround the api", context do
+    Meilisearch.start_link(:main, context[:meili])
 
     # Instance should be healthy
     assert true =
@@ -82,9 +85,10 @@ defmodule MeilisearchTest do
              |> Meilisearch.Health.get()
 
     # Instance should be of @meiliversion
+    version = context[:version]
     assert {:ok,
             %Meilisearch.Version{
-              pkgVersion: @meiliversion
+              pkgVersion: ^version
             }} =
              :main
              |> Meilisearch.client()

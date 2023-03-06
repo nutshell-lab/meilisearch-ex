@@ -10,9 +10,8 @@ defmodule MeilisearchTest.MeiliContainer do
 
   @doc """
   Creates a Meilisearch container.
-  Runs Meilisearch 1.0.0 by default, but a custom image can also be set.
   """
-  def new(image \\ "getmeili/meilisearch:v1.0.0", opts \\ []) do
+  def new(image, opts \\ []) do
     Docker.Container.new(
       image,
       exposed_ports: [@port],
