@@ -10,8 +10,14 @@ defmodule Meilisearch.MixProject do
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
       consolidate_protocols: Mix.env() != :test,
+
+      name: "Meilisearch-Ex",
+      organization: "nutshell_lab",
+      licenses: ["MIT"],
+      source_url: "https://github.com/nutshell-lab/meilisearch-ex",
+      homepage_url: "https://github.com/nutshell-lab/meilisearch-ex",
       docs: [
-        main: "Meilisearch-ex",
+        main: "Meilisearch-Ex",
         extras: ["README.md"]
       ]
     ]
