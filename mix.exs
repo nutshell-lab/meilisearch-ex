@@ -9,6 +9,7 @@ defmodule Meilisearch.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
+      consolidate_protocols: Mix.env() != :test,
       docs: [
         main: "Meilisearch-ex",
         extras: ["README.md"]

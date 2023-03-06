@@ -25,15 +25,17 @@ defmodule Meilisearch.Client do
     key = Keyword.get(opts, :key, "")
     timeout = Keyword.get(opts, :timeout, 2_000)
     log_level = Keyword.get(opts, :log_level, :warn)
+    debug = Keyword.get(opts, :debug, false)
 
     middleware = [
       {Tesla.Middleware.BaseUrl, endpoint},
       Tesla.Middleware.JSON,
       Tesla.Middleware.PathParams,
       {Tesla.Middleware.BearerAuth, token: key},
+      {Tesla.Middleware.Headers, [{"Content-Type", "application/json"}]},
       {Tesla.Middleware.Timeout, timeout: timeout},
-      {Tesla.Middleware.FollowRedirects, max_redirects: 3},
-      {Tesla.Middleware.Logger, log_level: log_level}
+      {Tesla.Middleware.Logger,
+       log_level: log_level, debug: debug, filter_headers: ["authorization"]}
     ]
 
     adapter = {Tesla.Adapter.Hackney, [recv_timeout: 30_000]}

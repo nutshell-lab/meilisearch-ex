@@ -187,9 +187,9 @@ defmodule Meilisearch.Task do
   def cancel(client, opts \\ []) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/tasks/cancel", query: opts)
+           |> Tesla.post("/tasks/cancel", nil, query: opts)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.PaginatedTasks.cast(data)}
+      {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
   end
 
