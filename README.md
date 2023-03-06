@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="400" height="62" src="meilisearch-ex.png">
+  <img width="400" height="62" src="https://raw.githubusercontent.com/nutshell-lab/meilisearch-ex/main/meilisearch-ex.png">
 </p>
 
 An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [Tesla](https://github.com/elixir-tesla/tesla) HTTP client.
