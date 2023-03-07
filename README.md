@@ -2,7 +2,7 @@
   <img width="400" height="62" src="https://raw.githubusercontent.com/nutshell-lab/meilisearch-ex/main/meilisearch-ex.png">
 </p>
 
-An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [Tesla](https://github.com/elixir-tesla/tesla) HTTP client.
+An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [Finch](https://github.com/sneako/finch) HTTP client wrapped by [Tesla](https://github.com/elixir-tesla/tesla).
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nutshell-lab/meilisearch-ex/elixir.yml)](https://github.com/nutshell-lab/meilisearch-ex/actions/workflows/elixir.yml)
 [![GitHub](https://img.shields.io/github/license/nutshell-lab/meilisearch-ex)](https://github.com/nutshell-lab/meilisearch-ex/blob/main/LICENCE)
