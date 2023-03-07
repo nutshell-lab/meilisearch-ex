@@ -4,9 +4,11 @@
 
 An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [Tesla](https://github.com/elixir-tesla/tesla) HTTP client.
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nutshell-lab/meilisearch-ex/elixir.yml)
-![GitHub](https://img.shields.io/github/license/nutshell-lab/meilisearch-ex)
-![Hex.pm](https://img.shields.io/hexpm/v/meilisearch_ex)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nutshell-lab/meilisearch-ex/elixir.yml)](https://github.com/nutshell-lab/meilisearch-ex/actions/workflows/elixir.yml)
+[![GitHub](https://img.shields.io/github/license/nutshell-lab/meilisearch-ex)](https://github.com/nutshell-lab/meilisearch-ex/blob/main/LICENCE)
+[![Hex.pm](https://img.shields.io/hexpm/v/meilisearch_ex)](https://hex.pm/packages/meilisearch_ex)
+[![Hex.pm](https://img.shields.io/hexpm/dw/meilisearch_ex)](https://hex.pm/packages/meilisearch_ex)
+[![Hexdocs.pm](https://img.shields.io/badge/hexdocs-documentation-ff69b4)](https://hexdocs.pm/meilisearch_ex)
 
 ## Installation
 
