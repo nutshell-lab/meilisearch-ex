@@ -9,7 +9,7 @@ An **unofficial** [Meilisearch](https://www.meilisearch.com/) client based on [F
 [![Hex.pm](https://img.shields.io/hexpm/v/meilisearch_ex)](https://hex.pm/packages/meilisearch_ex)
 [![Hex.pm](https://img.shields.io/hexpm/dw/meilisearch_ex)](https://hex.pm/packages/meilisearch_ex)
 [![Hexdocs.pm](https://img.shields.io/badge/hexdocs-documentation-ff69b4)](https://hexdocs.pm/meilisearch_ex)
-![Coveralls](https://img.shields.io/coverallsCoverage/github/nutshell-lab/meilisearch-ex)
+[![Coveralls](https://img.shields.io/coverallsCoverage/github/nutshell-lab/meilisearch-ex)](https://coveralls.io/github/nutshell-lab/meilisearch-ex)
 
 ## Installation
 
@@ -19,7 +19,7 @@ The package can be installed by adding `meilisearch_ex` to your list of dependen
 def deps do
   [
     {:finch, "~> 0.14.0"},
-    {:meilisearch_ex, "~> 1.0.0"}
+    {:meilisearch_ex, "~> 1.0.1"}
   ]
 end
 ```
