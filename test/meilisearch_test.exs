@@ -980,7 +980,7 @@ defmodule MeilisearchTest do
              |> Meilisearch.client()
              |> Meilisearch.Index.create(%{uid: "movies_new", primaryKey: "id"})
 
-    assert :succeeded = wait_for_task(Meilisearch.client(:main), cancelation_task)
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
     assert {:ok,
             %Meilisearch.SummarizedTask{
@@ -993,7 +993,7 @@ defmodule MeilisearchTest do
              |> Meilisearch.client()
              |> Meilisearch.Index.swap([%{indexes: ["movies", "movies_new"]}])
 
-    assert :succeeded = wait_for_task(Meilisearch.client(:main), cancelation_task)
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
     # Let's delete our index
     assert {:ok,
@@ -1017,6 +1017,49 @@ defmodule MeilisearchTest do
               message: "Index `movies` not found.",
               link: "https://docs.meilisearch.com/errors#index_not_found"
             }, 404} = :main |> Meilisearch.client() |> Meilisearch.Index.get("movies")
+
+    # Cleanup all succeeded tasks
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: nil,
+              status: :enqueued,
+              type: :taskDeletion
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Task.delete(statuses: "succeeded,canceled")
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %Meilisearch.PaginatedTasks{
+              results: [
+                %Meilisearch.Task{
+                  uid: _,
+                  indexUid: nil,
+                  status: :succeeded,
+                  type: :taskDeletion,
+                  canceledBy: nil,
+                  details: %{
+                    "deletedTasks" => _,
+                    "matchedTasks" => _,
+                    "originalFilter" => "?statuses=succeeded%2Ccanceled"
+                  },
+                  error: nil,
+                  duration: _,
+                  enqueuedAt: _,
+                  startedAt: _,
+                  finishedAt: _
+                }
+              ],
+              limit: 10,
+              from: _,
+              next: nil
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Task.list(limit: 10)
 
     # Dump our sweet instance
     assert {:ok,

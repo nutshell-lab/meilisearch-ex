@@ -231,7 +231,7 @@ defmodule Meilisearch.Task do
            client
            |> Tesla.delete("/tasks", query: opts)
            |> Meilisearch.Client.handle_response() do
-      {:ok, Meilisearch.PaginatedTasks.cast(data)}
+      {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
   end
 end

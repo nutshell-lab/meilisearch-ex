@@ -21,6 +21,13 @@ defmodule Meilisearch.MixProject do
         source_ref: "v#{@version}",
         source_url: @github_url,
         extras: ["README.md"]
+      ],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -56,7 +63,8 @@ defmodule Meilisearch.MixProject do
       {:finch, "~> 0.14.0", only: [:dev, :test]},
       {:typed_ecto_schema, "~> 0.4.1", runtime: false},
       {:excontainers, "~> 0.3.0", only: [:dev, :test]},
-      {:ex_doc, "~> 0.27", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
