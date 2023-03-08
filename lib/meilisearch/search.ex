@@ -79,19 +79,64 @@ defmodule Meilisearch.Search do
   ## Examples
 
       iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
-      iex> Meilisearch.Index.get(client, "movies")
+      iex> Meilisearch.Search.search(client, "movies", q: "space")
       {:ok, %{
-        uid: "movies",
-        primaryKey: "id",
-        createdAt: ~U[2021-08-12 10:00:00],
-        updatedAt: ~U[2021-08-12 10:00:00]
+        offset: 0,
+        limit: 20,
+        estimatedTotalHits: 1,
+        totalHits: 1,
+        totalPages: 1,
+        totalPages: 1,
+        page: 1,
+        facetDistribution: %{
+          "genres" => %{
+            "action" => 273,
+            "animation" => 118,
+            "adventure" => 132,
+            "fantasy" => 67,
+            "comedy" => 475,
+            "mystery" => 70,
+            "thriller" => 217
+          }
+        },
+        processingTimeMs: 11,
+        query: "space",
+        hits: [%{
+          "id" => 2001,
+          "title" => "2001: A Space Odyssey"
+        }]
       }}
 
   """
-  @spec search(Tesla.Client.t(), String.t(), search_params()) ::
-          {:ok, Meilisearch.Pagination.t(Meilisearch.Document.t())}
+  @spec search(
+          Tesla.Client.t(),
+          String.t(),
+          q: String.t(),
+          offset: integer(),
+          limit: integer(),
+          hitsPerPage: integer(),
+          page: integer(),
+          filter: String.t() | list(String.t()) | nil,
+          facets: list(String.t()) | nil,
+          attributesToRetrieve: list(String.t()),
+          attributesToCrop: list(String.t()) | nil,
+          cropLength: integer(),
+          cropMarker: String.t(),
+          attributesToHighlight: list(String.t()) | nil,
+          highlightPreTag: String.t(),
+          highlightPostTag: String.t(),
+          showMatchesPosition: boolean(),
+          sort: list(String.t()) | nil,
+          matchingStrategy: String.t() | :last | :all
+        ) ::
+          {:ok, __MODULE__.t(Meilisearch.Document.t())}
           | {:error, Meilisearch.Client.error()}
-  def search(client, index_uid, params) do
+  def search(client, index_uid, params \\ [])
+
+  def search(client, index_uid, params) when is_list(params),
+    do: search(client, index_uid, Enum.into(params, %{}))
+
+  def search(client, index_uid, params) when is_map(params) do
     with {:ok, data} <-
            client
            |> Tesla.post("/indexes/:index_uid/search", params,

@@ -90,6 +90,7 @@ defmodule MeilisearchTest do
 
     # Instance should be of @meiliversion
     version = context[:version]
+
     assert {:ok,
             %Meilisearch.Version{
               pkgVersion: ^version
@@ -246,6 +247,22 @@ defmodule MeilisearchTest do
              :main
              |> Meilisearch.client()
              |> Meilisearch.Search.search("movies", %{q: "flat"})
+
+    assert {:ok,
+            %Meilisearch.Search{
+              query: "flat",
+              hits: [
+                %{
+                  "uuid" => 1,
+                  "title" => "Flatman",
+                  "director" => "Roberto",
+                  "genres" => ["sf", "drama"]
+                }
+              ]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Search.search("movies", q: "flat", limit: 1)
 
     # Let's list all our documents
     assert {:ok,
@@ -950,6 +967,33 @@ defmodule MeilisearchTest do
              :main
              |> Meilisearch.client()
              |> Meilisearch.Task.get(cancelation_task)
+
+    # Let's swap our index with another
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies_new",
+              status: :enqueued,
+              type: :indexCreation
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.create(%{uid: "movies_new", primaryKey: "id"})
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), cancelation_task)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: nil,
+              status: :enqueued,
+              type: :indexSwap
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.swap([%{indexes: ["movies", "movies_new"]}])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), cancelation_task)
 
     # Let's delete our index
     assert {:ok,

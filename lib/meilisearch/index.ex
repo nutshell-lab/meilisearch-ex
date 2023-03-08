@@ -173,7 +173,7 @@ defmodule Meilisearch.Index do
       iex> Meilisearch.Index.swap(client, [%{indexes: ["movies", "actors"]}])
       {:ok, %{
         taskUid: 0,
-        indexUid: null,
+        indexUid: nil,
         status: :enqueued,
         type: :indexSwap,
         enqueuedAt: ~U[2021-08-12 10:00:00]

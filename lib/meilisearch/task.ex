@@ -84,7 +84,8 @@ defmodule Meilisearch.Task do
       }]}}
 
   """
-  @spec list(Tesla.Client.t(),
+  @spec list(
+          Tesla.Client.t(),
           limit: integer(),
           from: integer(),
           uids: String.t(),
