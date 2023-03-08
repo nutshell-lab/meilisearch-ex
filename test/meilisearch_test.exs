@@ -74,6 +74,106 @@ defmodule MeilisearchTest do
              |> Meilisearch.Health.healthy?()
   end
 
+  test "Meilisearch manipulate keys", context do
+    Meilisearch.start_link(:main, context[:meili])
+
+    assert {:ok,
+            %{
+              offset: 0,
+              limit: 20,
+              total: 2,
+              results: [
+                %{
+                  name: "Default Search API Key",
+                  description: "Use it to search from the frontend",
+                  key: _,
+                  uid: _,
+                  actions: ["search"],
+                  indexes: ["*"],
+                  expiresAt: nil,
+                  createdAt: _,
+                  updatedAt: _
+                },
+                %{
+                  name: "Default Admin API Key",
+                  description:
+                    "Use it for anything that is not a search operation. Caution! Do not expose it on a public frontend",
+                  key: _,
+                  uid: admin_key,
+                  actions: ["*"],
+                  indexes: ["*"],
+                  expiresAt: nil,
+                  createdAt: _,
+                  updatedAt: _
+                }
+              ]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Key.list()
+
+    assert {:ok,
+            %{
+              name: "Default Admin API Key",
+              description:
+                "Use it for anything that is not a search operation. Caution! Do not expose it on a public frontend",
+              key: _,
+              uid: ^admin_key,
+              actions: ["*"],
+              indexes: ["*"],
+              expiresAt: nil,
+              createdAt: _,
+              updatedAt: _
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Key.get(admin_key)
+
+    assert {:ok,
+            %{
+              name: "SUPERKEY",
+              description: nil,
+              key: _,
+              uid: superkey,
+              actions: ["*"],
+              indexes: ["*"],
+              expiresAt: nil,
+              createdAt: _,
+              updatedAt: _
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Key.create(%{
+               name: "SUPERKEY",
+               actions: ["*"],
+               indexes: ["*"],
+               expiresAt: nil
+             })
+
+    assert {:ok,
+            %{
+              name: "SUPERKEY",
+              description: "Super key ?",
+              key: _,
+              uid: ^superkey,
+              actions: ["*"],
+              indexes: ["*"],
+              expiresAt: nil,
+              createdAt: _,
+              updatedAt: _
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Key.update(superkey, %{
+               description: "Super key ?"
+             })
+
+    assert {:ok, nil} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Key.delete(superkey)
+  end
+
   test "Full tour arround the api", context do
     Meilisearch.start_link(:main, context[:meili])
 
@@ -196,6 +296,24 @@ defmodule MeilisearchTest do
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :documentAdditionOrUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.create_or_replace("movies", %Movie{
+               uuid: 2,
+               title: "Superbat",
+               director: "Rico",
+               genres: ["commedy", "polar"]
+             })
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
     # Let's get stats about our index
     assert {:ok,
             %{
@@ -232,6 +350,28 @@ defmodule MeilisearchTest do
              |> Meilisearch.Stats.all()
 
     # Let's search
+    assert {:ok,
+            %Meilisearch.Search{
+              query: nil,
+              hits: [
+                %{
+                  "uuid" => 1,
+                  "title" => "Flatman",
+                  "director" => "Roberto",
+                  "genres" => ["sf", "drama"]
+                },
+                %{
+                  "uuid" => 2,
+                  "title" => "Superbat",
+                  "director" => "Rico",
+                  "genres" => ["commedy", "polar"]
+                }
+              ]
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Search.search("movies")
+
     assert {:ok,
             %Meilisearch.Search{
               query: "flat",
@@ -339,6 +479,24 @@ defmodule MeilisearchTest do
                %Movie{uuid: 1, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]},
                %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["commedy", "polar"]}
              ])
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "movies",
+              status: :enqueued,
+              type: :documentAdditionOrUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.create_or_update("movies", %Movie{
+               uuid: 2,
+               title: "Superbat",
+               director: "Rico",
+               genres: ["commedy", "polar"]
+             })
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 

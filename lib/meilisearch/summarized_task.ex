@@ -32,8 +32,6 @@ defmodule Meilisearch.SummarizedTask do
     field(:enqueuedAt, :utc_datetime)
   end
 
-  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
-
   def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:taskUid, :indexUid, :status, :type, :enqueuedAt])

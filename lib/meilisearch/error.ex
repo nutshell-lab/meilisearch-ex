@@ -132,7 +132,6 @@ defmodule Meilisearch.Error do
   end
 
   def cast(data) when is_nil(data), do: nil
-  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
 
   def cast(data) when is_map(data) do
     %__MODULE__{}

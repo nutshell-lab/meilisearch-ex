@@ -170,7 +170,7 @@ defmodule Meilisearch.Key do
   def update(client, key_uid, params) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/keys/:key_uid", params, opts: [path_params: [key_uid: key_uid]])
+           |> Tesla.patch("/keys/:key_uid", params, opts: [path_params: [key_uid: key_uid]])
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
     end

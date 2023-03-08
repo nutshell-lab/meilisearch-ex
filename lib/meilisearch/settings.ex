@@ -16,8 +16,6 @@ defmodule Meilisearch.Settings do
     embeds_one(:pagination, __MODULE__.Pagination)
   end
 
-  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
-
   def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [
@@ -811,8 +809,6 @@ defmodule Meilisearch.Settings do
     def changeset(mod \\ %__MODULE__{}, data),
       do: Ecto.Changeset.cast(mod, data, [:maxValuesPerFacet])
 
-    def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
-
     def cast(data) when is_map(data) do
       %__MODULE__{}
       |> changeset(data)
@@ -914,8 +910,6 @@ defmodule Meilisearch.Settings do
 
     def changeset(mod \\ %__MODULE__{}, data),
       do: Ecto.Changeset.cast(mod, data, [:maxTotalHits])
-
-    def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
 
     def cast(data) when is_map(data) do
       %__MODULE__{}
@@ -1024,8 +1018,6 @@ defmodule Meilisearch.Settings do
       |> Ecto.Changeset.cast(data, [:enabled, :disableOnWords, :disableOnAttributes])
       |> Ecto.Changeset.cast_embed(:minWordSizeForTypos)
     end
-
-    def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
 
     def cast(data) when is_map(data) do
       %__MODULE__{}
@@ -1144,8 +1136,6 @@ defmodule Meilisearch.Settings do
 
       def changeset(mod \\ %__MODULE__{}, data),
         do: Ecto.Changeset.cast(mod, data, [:oneTypo, :twoTypos])
-
-      def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
 
       def cast(data) when is_map(data) do
         %__MODULE__{}
