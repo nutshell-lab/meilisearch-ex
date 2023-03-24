@@ -7,7 +7,7 @@ defmodule Meilisearch.Task do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "task", null: false do
+  typed_embedded_schema null: false do
     field(:uid, :integer)
     field(:indexUid, :string, null: true)
 

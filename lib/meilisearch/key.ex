@@ -7,7 +7,7 @@ defmodule Meilisearch.Key do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "key", null: false do
+  typed_embedded_schema null: false do
     field(:name, :string, null: true)
     field(:description, :string, null: true)
     field(:key, :string)

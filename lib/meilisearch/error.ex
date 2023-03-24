@@ -7,7 +7,7 @@ defmodule Meilisearch.Error do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "error", null: false do
+  typed_embedded_schema null: false do
     field(:message, :string)
     field(:link, :string)
 

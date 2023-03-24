@@ -7,7 +7,7 @@ defmodule Meilisearch.Version do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "version", null: false do
+  typed_embedded_schema null: false do
     field(:commitSha, :string)
     field(:commitDate, :utc_datetime)
     field(:pkgVersion, :string)

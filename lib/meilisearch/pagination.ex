@@ -5,7 +5,7 @@ defmodule Meilisearch.Pagination do
 
   use Ecto.Schema
   @primary_key false
-  schema "pagination" do
+  embedded_schema do
     field(:results, {:array, :map})
     field(:offset, :integer)
     field(:limit, :integer)

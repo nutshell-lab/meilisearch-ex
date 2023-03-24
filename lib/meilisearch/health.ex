@@ -7,7 +7,7 @@ defmodule Meilisearch.Health do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "health", null: false do
+  typed_embedded_schema null: false do
     field(:status, :string)
   end
 

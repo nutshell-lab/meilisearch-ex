@@ -4,22 +4,14 @@ defmodule Meilisearch.Stats do
   [Key API](https://docs.meilisearch.com/reference/api/stats.html)
   """
 
-  use Ecto.Schema
+  use TypedEctoSchema
 
   @primary_key false
-  schema "stats" do
+  typed_embedded_schema do
     field(:databaseSize, :integer)
     field(:lastUpdate, :utc_datetime)
-    field(:indexes, :map)
+    field(:indexes, :map) :: %{String.t() => Meilisearch.Stats.Stat.t()}
   end
-
-  @type t() :: %__MODULE__{
-          databaseSize: integer(),
-          lastUpdate: DateTime.t(),
-          indexes: %{
-            String.t() => Meilisearch.Stats.Stat.t()
-          }
-        }
 
   def cast(data) when is_map(data) do
     %__MODULE__{}
@@ -121,22 +113,14 @@ defmodule Meilisearch.Stats do
   end
 
   defmodule Stat do
-    use Ecto.Schema
+    use TypedEctoSchema
 
     @primary_key false
-    schema "stat" do
+    typed_embedded_schema do
       field(:numberOfDocuments, :integer)
       field(:isIndexing, :boolean)
-      field(:fieldDistribution, :map)
+      field(:fieldDistribution, :map) :: %{String.t() => integer()}
     end
-
-    @type t() :: %__MODULE__{
-            numberOfDocuments: integer(),
-            isIndexing: boolean(),
-            fieldDistribution: %{
-              String.t() => integer()
-            }
-          }
 
     def cast(data) when is_map(data) do
       %__MODULE__{}

@@ -7,7 +7,7 @@ defmodule Meilisearch.SummarizedTask do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "task", null: false do
+  typed_embedded_schema null: false do
     field(:taskUid, :integer)
     field(:indexUid, :string, null: true)
 

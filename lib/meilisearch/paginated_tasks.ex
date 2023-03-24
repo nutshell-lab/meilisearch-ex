@@ -6,7 +6,7 @@ defmodule Meilisearch.PaginatedTasks do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "pagination", null: false do
+  typed_embedded_schema null: false do
     field(:results, {:array, :map}) :: list(Meilisearch.Task.t())
     field(:limit, :integer)
     field(:from, :integer)

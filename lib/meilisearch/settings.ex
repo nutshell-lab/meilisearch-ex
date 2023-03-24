@@ -2,7 +2,7 @@ defmodule Meilisearch.Settings do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "settings", null: false do
+  typed_embedded_schema null: false do
     field(:displayedAttributes, {:array, :string})
     field(:searchableAttributes, {:array, :string})
     field(:filterableAttributes, {:array, :string})
@@ -802,7 +802,7 @@ defmodule Meilisearch.Settings do
     use TypedEctoSchema
 
     @primary_key false
-    typed_schema "settings_faceting", null: false do
+    typed_embedded_schema null: false do
       field(:maxValuesPerFacet, :integer)
     end
 
@@ -904,7 +904,7 @@ defmodule Meilisearch.Settings do
     use TypedEctoSchema
 
     @primary_key false
-    typed_schema "settings_pagination", null: false do
+    typed_embedded_schema null: false do
       field(:maxTotalHits, :integer)
     end
 
@@ -1006,7 +1006,7 @@ defmodule Meilisearch.Settings do
     use TypedEctoSchema
 
     @primary_key false
-    typed_schema "settings_typo_tolerence", null: false do
+    typed_embedded_schema null: false do
       field(:enabled, :boolean)
       field(:disableOnWords, {:array, :string})
       field(:disableOnAttributes, {:array, :string})
@@ -1129,7 +1129,7 @@ defmodule Meilisearch.Settings do
       use TypedEctoSchema
 
       @primary_key false
-      typed_schema "settings_typo_tolerence", null: false do
+      typed_embedded_schema null: false do
         field(:oneTypo, :integer)
         field(:twoTypos, :integer)
       end

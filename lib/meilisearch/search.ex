@@ -6,7 +6,7 @@ defmodule Meilisearch.Search do
 
   use Ecto.Schema
   @primary_key false
-  schema "search" do
+  embedded_schema do
     field(:hits, {:array, :map})
     field(:offset, :integer)
     field(:limit, :integer)

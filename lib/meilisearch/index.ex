@@ -7,7 +7,7 @@ defmodule Meilisearch.Index do
   use TypedEctoSchema
 
   @primary_key false
-  typed_schema "index", null: false do
+  typed_embedded_schema null: false do
     field(:uid, :string)
     field(:primaryKey, :string)
     field(:createdAt, :utc_datetime)
