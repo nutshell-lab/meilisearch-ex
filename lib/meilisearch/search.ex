@@ -74,7 +74,7 @@ defmodule Meilisearch.Search do
 
   @doc """
   Search into your Meilisearch indexes using a POST request.
-  [meili doc](https://docs.meilisearch.com/reference/api/indexes.html#get-one-index)
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#get-one-index)
 
   ## Examples
 

@@ -5,8 +5,8 @@ defmodule Meilisearch.Dump do
   """
 
   @doc """
-  Trigger a dump creation in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/dump.html#create-a-dump)
+  Trigger a dump creation in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/dump.html#create-a-dump)
 
   ## Examples
 

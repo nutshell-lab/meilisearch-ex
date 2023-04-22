@@ -31,8 +31,8 @@ defmodule Meilisearch.Stats do
   end
 
   @doc """
-  Get stats about all indexes of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/stats.html#get-stats-of-all-indexes)
+  Get stats about all indexes of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/stats.html#get-stats-of-all-indexes)
 
   ## Examples
 
@@ -81,8 +81,8 @@ defmodule Meilisearch.Stats do
   end
 
   @doc """
-  Get stats about a specific index of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/stats.html#get-stats-of-an-index)
+  Get stats about a specific index of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/stats.html#get-stats-of-an-index)
 
   ## Examples
 

@@ -9,8 +9,8 @@ defmodule Meilisearch.Document do
   @type document_id() :: String.t() | integer()
 
   @doc """
-  List Documents of an Index of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/documents.html#get-documents)
+  List Documents of an Index of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#get-documents)
 
   ## Examples
 
@@ -42,8 +42,8 @@ defmodule Meilisearch.Document do
   end
 
   @doc """
-  Get an Document of an Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/documents.html#get-one-document)
+  Get an Document of an Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#get-one-document)
 
   ## Examples
 
@@ -66,8 +66,8 @@ defmodule Meilisearch.Document do
   end
 
   @doc """
-  Create or update a Documents into an Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
+  Create or update a Documents into an Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
 
   ## Examples
 
@@ -99,8 +99,8 @@ defmodule Meilisearch.Document do
   end
 
   @doc """
-  Create or update a Documents into an Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
+  Create or update a Documents into an Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
 
   ## Examples
 
@@ -132,8 +132,8 @@ defmodule Meilisearch.Document do
   end
 
   @doc """
-  Delete all Documents of an Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/documents.html#delete-all-documents)
+  Delete all Documents of an Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#delete-all-documents)
 
   ## Examples
 
@@ -162,8 +162,8 @@ defmodule Meilisearch.Document do
   end
 
   @doc """
-  Delete one Documents of an Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/documents.html#delete-one-document)
+  Delete one Documents of an Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#delete-one-document)
 
   ## Examples
 
@@ -192,8 +192,8 @@ defmodule Meilisearch.Document do
   end
 
   @doc """
-  Delete a batch of Documents of an Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/documents.html#delete-documents-by-batch)
+  Delete a batch of Documents of an Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#delete-documents-by-batch)
 
   ## Examples
 

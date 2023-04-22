@@ -38,8 +38,8 @@ defmodule Meilisearch.Key do
   end
 
   @doc """
-  List keys of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/keys.html#get-all-keys)
+  List keys of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/keys.html#get-all-keys)
 
   ## Examples
 
@@ -71,8 +71,8 @@ defmodule Meilisearch.Key do
   end
 
   @doc """
-  Get a Key of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/keys.html#get-one-key)
+  Get a Key of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/keys.html#get-one-key)
 
   ## Examples
 
@@ -103,8 +103,8 @@ defmodule Meilisearch.Key do
   end
 
   @doc """
-  Create a new Key in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/keys.html#create-a-key)
+  Create a new Key in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/keys.html#create-a-key)
 
   ## Examples
 
@@ -142,8 +142,8 @@ defmodule Meilisearch.Key do
   end
 
   @doc """
-  Update an existing Key in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/keys.html#update-a-key)
+  Update an existing Key in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/keys.html#update-a-key)
 
   ## Examples
 
@@ -177,8 +177,8 @@ defmodule Meilisearch.Key do
   end
 
   @doc """
-  Delete an existing Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/indexes.html#delete-an-index)
+  Delete an existing Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#delete-an-index)
 
   ## Examples
 

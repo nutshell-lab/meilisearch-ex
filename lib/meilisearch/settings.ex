@@ -35,8 +35,8 @@ defmodule Meilisearch.Settings do
   end
 
   @doc """
-  Get settings of an Index of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-settings)
+  Get settings of an Index of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-settings)
 
   ## Examples
 
@@ -64,8 +64,8 @@ defmodule Meilisearch.Settings do
   end
 
   @doc """
-  Update settings of an Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-settings)
+  Update settings of an Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-settings)
 
   ## Examples
 
@@ -94,8 +94,8 @@ defmodule Meilisearch.Settings do
   end
 
   @doc """
-  Reset settings of an Index in your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/settings.html#reset-settings)
+  Reset settings of an Index in your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#reset-settings)
 
   ## Examples
 
@@ -125,8 +125,8 @@ defmodule Meilisearch.Settings do
 
   defmodule DisplayedAttributes do
     @doc """
-    Get displayed attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-displayed-attributes)
+    Get displayed attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-displayed-attributes)
 
     ## Examples
 
@@ -146,8 +146,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update displayed attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-displayed-attributes)
+    Update displayed attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-displayed-attributes)
 
     ## Examples
 
@@ -176,8 +176,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset displayed attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-displayed-attributes)
+    Reset displayed attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-displayed-attributes)
 
     ## Examples
 
@@ -208,8 +208,8 @@ defmodule Meilisearch.Settings do
 
   defmodule SearchableAttributes do
     @doc """
-    Get searchable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-searchable-attributes)
+    Get searchable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-searchable-attributes)
 
     ## Examples
 
@@ -229,8 +229,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update searchable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-searchable-attributes)
+    Update searchable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-searchable-attributes)
 
     ## Examples
 
@@ -259,8 +259,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset searchable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-searchable-attributes)
+    Reset searchable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-searchable-attributes)
 
     ## Examples
 
@@ -291,8 +291,8 @@ defmodule Meilisearch.Settings do
 
   defmodule FilterableAttributes do
     @doc """
-    Get filterable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-filterable-attributes)
+    Get filterable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-filterable-attributes)
 
     ## Examples
 
@@ -312,8 +312,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update filterable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-filterable-attributes)
+    Update filterable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-filterable-attributes)
 
     ## Examples
 
@@ -342,8 +342,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset filterable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-filterable-attributes)
+    Reset filterable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-filterable-attributes)
 
     ## Examples
 
@@ -374,8 +374,8 @@ defmodule Meilisearch.Settings do
 
   defmodule SortableAttributes do
     @doc """
-    Get sortable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-sortable-attributes)
+    Get sortable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-sortable-attributes)
 
     ## Examples
 
@@ -395,8 +395,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update sortable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-sortable-attributes)
+    Update sortable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-sortable-attributes)
 
     ## Examples
 
@@ -425,8 +425,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset sortable attributes settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-sortable-attributes)
+    Reset sortable attributes settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-sortable-attributes)
 
     ## Examples
 
@@ -457,8 +457,8 @@ defmodule Meilisearch.Settings do
 
   defmodule RankingRules do
     @doc """
-    Get ranking rules settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-ranking-rules)
+    Get ranking rules settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-ranking-rules)
 
     ## Examples
 
@@ -478,8 +478,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update ranking rules settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-ranking-rules)
+    Update ranking rules settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-ranking-rules)
 
     ## Examples
 
@@ -508,8 +508,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset ranking rules settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-ranking-rules)
+    Reset ranking rules settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-ranking-rules)
 
     ## Examples
 
@@ -540,8 +540,8 @@ defmodule Meilisearch.Settings do
 
   defmodule StopWords do
     @doc """
-    Get stop words settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-stop-words)
+    Get stop words settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-stop-words)
 
     ## Examples
 
@@ -561,8 +561,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update stop words settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-stop-words)
+    Update stop words settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-stop-words)
 
     ## Examples
 
@@ -591,8 +591,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset stop words settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-stop-words)
+    Reset stop words settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-stop-words)
 
     ## Examples
 
@@ -623,8 +623,8 @@ defmodule Meilisearch.Settings do
 
   defmodule Synonyms do
     @doc """
-    Get synonyms settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-synonyms)
+    Get synonyms settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-synonyms)
 
     ## Examples
 
@@ -648,8 +648,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update synonyms settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-synonyms)
+    Update synonyms settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-synonyms)
 
     ## Examples
 
@@ -682,8 +682,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset synonyms settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-synonyms)
+    Reset synonyms settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-synonyms)
 
     ## Examples
 
@@ -714,8 +714,8 @@ defmodule Meilisearch.Settings do
 
   defmodule DistinctAttributes do
     @doc """
-    Get distinct attribute settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attribute)
+    Get distinct attribute settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attribute)
 
     ## Examples
 
@@ -735,8 +735,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update distinct attribute settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-distinct-attribute)
+    Update distinct attribute settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-distinct-attribute)
 
     ## Examples
 
@@ -768,8 +768,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset distinct attribute settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attribute)
+    Reset distinct attribute settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attribute)
 
     ## Examples
 
@@ -816,8 +816,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Get faceting settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-faceting-settings)
+    Get faceting settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-faceting-settings)
 
     ## Examples
 
@@ -840,8 +840,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update faceting settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-faceting-settings)
+    Update faceting settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-faceting-settings)
 
     ## Examples
 
@@ -870,8 +870,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset faceting settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#reset-faceting-settings)
+    Reset faceting settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#reset-faceting-settings)
 
     ## Examples
 
@@ -918,8 +918,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Get pagination settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-pagination-settings)
+    Get pagination settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-pagination-settings)
 
     ## Examples
 
@@ -942,8 +942,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update pagination settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-pagination-settings)
+    Update pagination settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-pagination-settings)
 
     ## Examples
 
@@ -972,8 +972,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset pagination settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#reset-pagination-settings)
+    Reset pagination settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#reset-pagination-settings)
 
     ## Examples
 
@@ -1026,8 +1026,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Get typo tolerance settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#get-typo-tolerance-settings)
+    Get typo tolerance settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-typo-tolerance-settings)
 
     ## Examples
 
@@ -1058,8 +1058,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Update typo tolerance settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#update-typo-tolerance-settings)
+    Update typo tolerance settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#update-typo-tolerance-settings)
 
     ## Examples
 
@@ -1096,8 +1096,8 @@ defmodule Meilisearch.Settings do
     end
 
     @doc """
-    Reset typo tolerance settings of an Index of your Meilsiearch instance.
-    [meili doc](https://docs.meilisearch.com/reference/api/settings.html#reset-typo-tolerance-settings)
+    Reset typo tolerance settings of an Index of your Meilisearch instance.
+    [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#reset-typo-tolerance-settings)
 
     ## Examples
 
