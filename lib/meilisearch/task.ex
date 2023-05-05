@@ -69,8 +69,8 @@ defmodule Meilisearch.Task do
   end
 
   @doc """
-  List tasks of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/tasks.html#get-tasks)
+  List tasks of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/tasks.html#get-tasks)
 
   ## Examples
 
@@ -112,8 +112,8 @@ defmodule Meilisearch.Task do
   end
 
   @doc """
-  Get an Task of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/tasks.html#get-one-task)
+  Get an Task of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/tasks.html#get-one-task)
 
   ## Examples
 
@@ -155,8 +155,8 @@ defmodule Meilisearch.Task do
   end
 
   @doc """
-  Cancel tasks of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/tasks.html#cancel-tasks)
+  Cancel tasks of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/tasks.html#cancel-tasks)
 
   ## Examples
 
@@ -195,8 +195,8 @@ defmodule Meilisearch.Task do
   end
 
   @doc """
-  Delete tasks of your Meilsiearch instance.
-  [meili doc](https://docs.meilisearch.com/reference/api/tasks.html#delete-tasks)
+  Delete tasks of your Meilisearch instance.
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/tasks.html#delete-tasks)
 
   ## Examples
 

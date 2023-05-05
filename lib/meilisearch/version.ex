@@ -21,7 +21,7 @@ defmodule Meilisearch.Version do
 
   @doc """
   Get a response from the /version endpoint of Meilisearch.
-  [meili doc](https://docs.meilisearch.com/reference/api/version.html#get-version-of-meilisearch)
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/version.html#get-version-of-meilisearch)
 
   ## Examples
 
