@@ -475,26 +475,45 @@ defmodule MeilisearchTest do
                |> Meilisearch.client()
                |> Meilisearch.Search.search("movies")
 
-      assert {:ok,
-              %Meilisearch.Search{
-                query: "flat",
-                hits: [
-                  %{
-                    "uuid" => 1,
-                    "title" => "Flatman",
-                    "director" => "Roberto",
-                    "genres" => ["sf", "drama"]
-                  }
-                ],
-                facetDistribution: %{
-                  "genres" => %{"drama" => 1, "sf" => 1},
-                  "rating" => %{"4" => 1}
-                },
-                facetStats: %{"rating" => %{"max" => 4.0, "min" => 4.0}}
-              }} =
-               :main
-               |> Meilisearch.client()
-               |> Meilisearch.Search.search("movies", %{q: "flat", facets: ["genres", "rating"]})
+      {:ok, result} =
+        :main
+        |> Meilisearch.client()
+        |> Meilisearch.Search.search("movies", %{q: "flat", facets: ["genres", "rating"]})
+
+      if context[:version] > "1.1.0" do
+        assert %Meilisearch.Search{
+                 query: "flat",
+                 hits: [
+                   %{
+                     "uuid" => 1,
+                     "title" => "Flatman",
+                     "director" => "Roberto",
+                     "genres" => ["sf", "drama"]
+                   }
+                 ],
+                 facetDistribution: %{
+                   "genres" => %{"drama" => 1, "sf" => 1},
+                   "rating" => %{"4" => 1}
+                 },
+                 facetStats: %{"rating" => %{"max" => 4.0, "min" => 4.0}}
+               } = result
+      else
+        assert %Meilisearch.Search{
+                 query: "flat",
+                 hits: [
+                   %{
+                     "uuid" => 1,
+                     "title" => "Flatman",
+                     "director" => "Roberto",
+                     "genres" => ["sf", "drama"]
+                   }
+                 ],
+                 facetDistribution: %{
+                   "genres" => %{"drama" => 1, "sf" => 1},
+                   "rating" => %{"4" => 1}
+                 }
+               } = result
+      end
 
       assert {:ok,
               %Meilisearch.Search{
