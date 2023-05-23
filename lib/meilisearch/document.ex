@@ -15,7 +15,7 @@ defmodule Meilisearch.Document do
   ## Examples
 
       iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
-      iex> Meilisearch.Documents.list(client, "movies", limit: 20, offset: 0)
+      iex> Meilisearch.Document.list(client, "movies", limit: 20, offset: 0)
       {:ok, %{offset: 0, limit: 20, total: 1, results: [%{
         "id" => 2001,
         "title" => "2001: A Space Odyssey"
