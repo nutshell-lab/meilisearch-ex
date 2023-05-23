@@ -12,8 +12,6 @@ jobs:
 
     strategy:
       matrix:
-        elixir: [1.14.3]
-        otp: [25.2.3]
         meili: [1.0.2, 1.1.1]
 
     env:
@@ -26,8 +24,8 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: ${{ matrix.elixir }}
-          otp-version: ${{ matrix.otp }}
+          version-type: strict
+          version-file: .tool-versions
       - name: Restore dependencies cache
         uses: actions/cache@v3
         with:
