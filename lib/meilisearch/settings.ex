@@ -11,7 +11,7 @@ defmodule Meilisearch.Settings do
     field(:stopWords, {:array, :string})
     field(:synonyms, :map)
     field(:distinctAttribute, :string, null: true)
-    embeds_one(:typoTolerance, __MODULE__.TypeTolerence)
+    embeds_one(:typoTolerance, __MODULE__.TypeTolerance)
     embeds_one(:faceting, __MODULE__.Faceting)
     embeds_one(:pagination, __MODULE__.Pagination)
   end
@@ -1002,7 +1002,7 @@ defmodule Meilisearch.Settings do
     end
   end
 
-  defmodule TypeTolerence do
+  defmodule TypeTolerance do
     use TypedEctoSchema
 
     @primary_key false

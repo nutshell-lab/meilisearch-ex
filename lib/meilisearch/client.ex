@@ -45,7 +45,7 @@ defmodule Meilisearch.Client do
   end
 
   @doc """
-  Handles responses sucess and errors, returns it formated.
+  Handles responses success and errors, returns it formatted.
   """
   def handle_response({:ok, %{status: status, body: body}})
       when status in 200..299 do

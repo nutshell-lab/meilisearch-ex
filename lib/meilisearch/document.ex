@@ -2,7 +2,7 @@ defmodule Meilisearch.Document do
   @moduledoc """
   Manipulate Meilisearch documents.
   Documents are not parsed into anything and are returned as plain maps with string keys.
-  [Document API](https://docs.meilisearch.com/references/documents.html)
+  [Document API](https://docs.meilisearch.com/reference/api/documents.html)
   """
 
   @type t() :: map()
@@ -15,7 +15,7 @@ defmodule Meilisearch.Document do
   ## Examples
 
       iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
-      iex> Meilisearch.Documents.list(client, "movies", limit: 20, offset: 0)
+      iex> Meilisearch.Document.list(client, "movies", limit: 20, offset: 0)
       {:ok, %{offset: 0, limit: 20, total: 1, results: [%{
         "id" => 2001,
         "title" => "2001: A Space Odyssey"

@@ -1,12 +1,13 @@
-defmodule Meilisearch.Search do
+defmodule Meilisearch.MultiSearch do
   @moduledoc """
   Search into your Meilisearch indexes.
-  [Search API](https://docs.meilisearch.com/reference/api/search.html)
+  [Multi-Search API](https://docs.meilisearch.com/reference/api/multi_search.html)
   """
 
   use Ecto.Schema
   @primary_key false
   embedded_schema do
+    field(:indexUid, :string)
     field(:hits, {:array, :map})
     field(:offset, :integer)
     field(:limit, :integer)
@@ -22,6 +23,7 @@ defmodule Meilisearch.Search do
   end
 
   @type t(item) :: %__MODULE__{
+          indexUid: String.t(),
           hits: list(item),
           offset: integer(),
           limit: integer(),
@@ -36,9 +38,12 @@ defmodule Meilisearch.Search do
           query: String.t()
         }
 
+  def cast(data) when is_list(data), do: Enum.map(data, &cast(&1))
+
   def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [
+      :indexUid,
       :hits,
       :offset,
       :limit,
@@ -55,7 +60,7 @@ defmodule Meilisearch.Search do
     |> Ecto.Changeset.apply_changes()
   end
 
-  @type search_params() :: %{
+  @type single_search_params() :: %{
           q: String.t(),
           offset: integer(),
           limit: integer(),
@@ -75,15 +80,17 @@ defmodule Meilisearch.Search do
           matchingStrategy: String.t() | :last | :all
         }
 
-  @doc """
-  Search into your Meilisearch indexes using a POST request.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#get-one-index)
+  @type search_params() :: %{
+          String.t() => single_search_params()
+        }
 
+  @doc """
   ## Examples
 
       iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")
-      iex> Meilisearch.Search.search(client, "movies", q: "space")
-      {:ok, %{
+      iex> Meilisearch.MultiSearch.multi_search(client, %{"movies" => [q: "space"], "books" => [q: "space]})
+      {:ok, [%{
+        indexUid: "movies",
         offset: 0,
         limit: 20,
         estimatedTotalHits: 1,
@@ -108,43 +115,33 @@ defmodule Meilisearch.Search do
           "id" => 2001,
           "title" => "2001: A Space Odyssey"
         }]
-      }}
+      }]}
 
   """
-  @spec search(
+  @spec multi_search(
           Tesla.Client.t(),
-          String.t(),
-          q: String.t(),
-          offset: integer(),
-          limit: integer(),
-          hitsPerPage: integer(),
-          page: integer(),
-          filter: String.t() | list(String.t()) | nil,
-          facets: list(String.t()) | nil,
-          attributesToRetrieve: list(String.t()),
-          attributesToCrop: list(String.t()) | nil,
-          cropLength: integer(),
-          cropMarker: String.t(),
-          attributesToHighlight: list(String.t()) | nil,
-          highlightPreTag: String.t(),
-          highlightPostTag: String.t(),
-          showMatchesPosition: boolean(),
-          sort: list(String.t()) | nil,
-          matchingStrategy: String.t() | :last | :all
+          search_params()
         ) ::
           {:ok, __MODULE__.t(Meilisearch.Document.t())}
           | {:error, Meilisearch.Client.error()}
-  def search(client, index_uid, params \\ [])
+  def multi_search(client, params \\ %{})
 
-  def search(client, index_uid, params) when is_list(params),
-    do: search(client, index_uid, Enum.into(params, %{}))
+  def multi_search(client, params) when is_list(params),
+    do: multi_search(client, Enum.into(params, %{}))
 
-  def search(client, index_uid, params) when is_map(params) do
-    with {:ok, data} <-
+  def multi_search(client, params) when is_map(params) do
+    params =
+      Enum.map(params, fn
+        {index_uid, %{} = params} ->
+          Map.put(params, :indexUid, index_uid)
+
+        {index_uid, params} when is_list(params) ->
+          Enum.into(params, %{indexUid: index_uid})
+      end)
+
+    with {:ok, %{"results" => data}} <-
            client
-           |> Tesla.post("/indexes/:index_uid/search", params,
-             opts: [path_params: [index_uid: index_uid]]
-           )
+           |> Tesla.post("/multi-search", %{queries: params})
            |> Meilisearch.Client.handle_response() do
       {:ok, __MODULE__.cast(data)}
     end

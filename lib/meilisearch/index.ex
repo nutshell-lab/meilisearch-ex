@@ -1,7 +1,7 @@
 defmodule Meilisearch.Index do
   @moduledoc """
   Manipulate Meilisearch indexes.
-  [Index API](https://docs.meilisearch.com/references/indexes.html)
+  [Index API](https://docs.meilisearch.com/reference/api/indexes.html)
   """
 
   use TypedEctoSchema

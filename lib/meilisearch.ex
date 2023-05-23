@@ -4,16 +4,16 @@ defmodule Meilisearch do
   The following Modules are provided for interacting with Meilisearch:
   * `Meilisearch.Client`: Create a HTTP client to interact with Meilisearch APIs.
   * `Meilisearch.Pagination`: Process paginated responses.
-  * `Meilisearch.Index`: [Index API](https://docs.meilisearch.com/references/indexes.html)
-  * `Meilisearch.Document`: [Document API](https://docs.meilisearch.com/references/documents.html)
-  * `Meilisearch.Search`: [Search API](https://docs.meilisearch.com/references/search.html)
-  * `Meilisearch.Task`: [Tasks API](https://docs.meilisearch.com/references/tasks.html)
-  * `Meilisearch.Key`: [Keys API](https://docs.meilisearch.com/references/keys.html)
-  * `Meilisearch.Settings`: [Settings API](https://docs.meilisearch.com/references/settings.html)
-  * `Meilisearch.Stats`: [Stats API](https://docs.meilisearch.com/references/stats.html)
-  * `Meilisearch.Health`: [Health API](https://docs.meilisearch.com/references/health.html)
-  * `Meilisearch.Version`: [Version API](https://docs.meilisearch.com/references/version.html)
-  * `Meilisearch.Dump`: [Dumps API](https://docs.meilisearch.com/references/dumps.html)
+  * `Meilisearch.Index`: [Index API](https://docs.meilisearch.com/reference/api/indexes.html)
+  * `Meilisearch.Document`: [Document API](https://docs.meilisearch.com/reference/api/documents.html)
+  * `Meilisearch.Search`: [Search API](https://docs.meilisearch.com/reference/api/search.html)
+  * `Meilisearch.Task`: [Tasks API](https://docs.meilisearch.com/reference/api/tasks.html)
+  * `Meilisearch.Key`: [Keys API](https://docs.meilisearch.com/reference/api/keys.html)
+  * `Meilisearch.Settings`: [Settings API](https://docs.meilisearch.com/reference/api/settings.html)
+  * `Meilisearch.Stats`: [Stats API](https://docs.meilisearch.com/reference/api/stats.html)
+  * `Meilisearch.Health`: [Health API](https://docs.meilisearch.com/reference/api/health.html)
+  * `Meilisearch.Version`: [Version API](https://docs.meilisearch.com/reference/api/version.html)
+  * `Meilisearch.Dump`: [Dumps API](https://docs.meilisearch.com/reference/api/dumps.html)
   * `Meilisearch.Error`: [Errors](https://docs.meilisearch.com/reference/errors/overview.html)
 
   ## Usage
