@@ -444,82 +444,84 @@ defmodule MeilisearchTest do
              |> Meilisearch.Search.search("movies", q: "flat", limit: 1)
 
     # Let's multi-search
-    assert {:ok,
-            [
-              %Meilisearch.MultiSearch{
-                indexUid: "books",
-                query: nil,
-                hits: [
-                  %{
-                    "uuid" => 1,
-                    "title" => "FlatmanB",
-                    "author" => "RobertoB",
-                    "genres" => ["sf", "drama"]
-                  },
-                  %{
-                    "uuid" => 2,
-                    "title" => "SuperbatB",
-                    "author" => "RicoB",
-                    "genres" => ["commedy", "polar"]
-                  }
-                ]
-              },
-              %Meilisearch.MultiSearch{
-                indexUid: "movies",
-                query: nil,
-                hits: [
-                  %{
-                    "uuid" => 1,
-                    "title" => "Flatman",
-                    "director" => "Roberto",
-                    "genres" => ["sf", "drama"]
-                  },
-                  %{
-                    "uuid" => 2,
-                    "title" => "Superbat",
-                    "director" => "Rico",
-                    "genres" => ["commedy", "polar"]
-                  }
-                ]
-              }
-            ]} =
-             :main
-             |> Meilisearch.client()
-             |> Meilisearch.MultiSearch.multi_search(%{"books" => [], "movies" => []})
+    if version > "1.1.0" do
+      assert {:ok,
+              [
+                %Meilisearch.MultiSearch{
+                  indexUid: "books",
+                  query: nil,
+                  hits: [
+                    %{
+                      "uuid" => 1,
+                      "title" => "FlatmanB",
+                      "author" => "RobertoB",
+                      "genres" => ["sf", "drama"]
+                    },
+                    %{
+                      "uuid" => 2,
+                      "title" => "SuperbatB",
+                      "author" => "RicoB",
+                      "genres" => ["commedy", "polar"]
+                    }
+                  ]
+                },
+                %Meilisearch.MultiSearch{
+                  indexUid: "movies",
+                  query: nil,
+                  hits: [
+                    %{
+                      "uuid" => 1,
+                      "title" => "Flatman",
+                      "director" => "Roberto",
+                      "genres" => ["sf", "drama"]
+                    },
+                    %{
+                      "uuid" => 2,
+                      "title" => "Superbat",
+                      "director" => "Rico",
+                      "genres" => ["commedy", "polar"]
+                    }
+                  ]
+                }
+              ]} =
+               :main
+               |> Meilisearch.client()
+               |> Meilisearch.MultiSearch.multi_search(%{"books" => [], "movies" => []})
 
-    assert {:ok,
-            [
-              %Meilisearch.MultiSearch{
-                indexUid: "books",
-                query: "flat",
-                hits: [
-                  %{
-                    "uuid" => 1,
-                    "title" => "FlatmanB",
-                    "author" => "RobertoB",
-                    "genres" => ["sf", "drama"]
-                  }
-                ]
-              },
-              %Meilisearch.MultiSearch{
-                indexUid: "movies",
-                query: "flat",
-                hits: [
-                  %{
-                    "uuid" => 1,
-                    "title" => "Flatman",
-                    "director" => "Roberto",
-                    "genres" => ["sf", "drama"]
-                  }
-                ]
-              }
-            ]} =
-             :main
-             |> Meilisearch.client()
-             |> Meilisearch.MultiSearch.multi_search(%{
-               "books" => [q: "flat"],
-               "movies" => [q: "flat"]
-             })
+      assert {:ok,
+              [
+                %Meilisearch.MultiSearch{
+                  indexUid: "books",
+                  query: "flat",
+                  hits: [
+                    %{
+                      "uuid" => 1,
+                      "title" => "FlatmanB",
+                      "author" => "RobertoB",
+                      "genres" => ["sf", "drama"]
+                    }
+                  ]
+                },
+                %Meilisearch.MultiSearch{
+                  indexUid: "movies",
+                  query: "flat",
+                  hits: [
+                    %{
+                      "uuid" => 1,
+                      "title" => "Flatman",
+                      "director" => "Roberto",
+                      "genres" => ["sf", "drama"]
+                    }
+                  ]
+                }
+              ]} =
+               :main
+               |> Meilisearch.client()
+               |> Meilisearch.MultiSearch.multi_search(%{
+                 "books" => [q: "flat"],
+                 "movies" => [q: "flat"]
+               })
+    end
 
     # Let's list all our documents
     assert {:ok,
