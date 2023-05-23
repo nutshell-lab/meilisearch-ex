@@ -42,7 +42,7 @@ defmodule Meilisearch.MixProject do
       licenses: ["MIT"],
       links: %{
         "Meilisearch" => "https://www.meilisearch.com/",
-        "Meilisearch documentation" => "https://docs.meilisearch.com/"
+        "Meilisearch documentation" => "https://www.meilisearch.com/docs"
       }
     ]
   end
