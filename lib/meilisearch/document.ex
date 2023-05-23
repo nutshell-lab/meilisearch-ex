@@ -2,7 +2,7 @@ defmodule Meilisearch.Document do
   @moduledoc """
   Manipulate Meilisearch documents.
   Documents are not parsed into anything and are returned as plain maps with string keys.
-  [Document API](https://docs.meilisearch.com/references/documents.html)
+  [Document API](https://docs.meilisearch.com/reference/api/documents.html)
   """
 
   @type t() :: map()

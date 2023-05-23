@@ -1,7 +1,7 @@
 defmodule Meilisearch.Health do
   @moduledoc """
   Retreive Meilisearch health status.
-  [Health API](https://docs.meilisearch.com/references/health.html)
+  [Health API](https://docs.meilisearch.com/reference/api/health.html)
   """
 
   use TypedEctoSchema

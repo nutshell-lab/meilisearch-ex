@@ -1,7 +1,7 @@
 defmodule Meilisearch.Search do
   @moduledoc """
   Search into your Meilisearch indexes.
-  [Search API](https://docs.meilisearch.com/references/search.html)
+  [Search API](https://docs.meilisearch.com/reference/api/search.html)
   """
 
   use Ecto.Schema

@@ -62,14 +62,14 @@ defmodule MeilisearchTest do
            |> Meilisearch.Health.healthy?()
   end
 
-  test "Meilisearch manually instanciating a client", context do
+  test "Meilisearch manually instantiating a client", context do
     assert true =
              context[:meili]
              |> Meilisearch.Client.new()
              |> Meilisearch.Health.healthy?()
   end
 
-  test "Meilisearch using a GenServer to retreive named client", context do
+  test "Meilisearch using a GenServer to retrieve named client", context do
     Meilisearch.start_link(:main, context[:meili])
 
     assert true =
@@ -178,7 +178,7 @@ defmodule MeilisearchTest do
              |> Meilisearch.Key.delete(superkey)
   end
 
-  test "Full tour arround the api", context do
+  test "Full tour around the api", context do
     Meilisearch.start_link(:main, context[:meili])
 
     # Instance should be healthy
@@ -312,7 +312,7 @@ defmodule MeilisearchTest do
              |> Meilisearch.client()
              |> Meilisearch.Document.create_or_replace("movies", [
                %Movie{uuid: 1, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]},
-               %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["commedy", "polar"]}
+               %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["comedy", "polar"]}
              ])
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
@@ -330,7 +330,7 @@ defmodule MeilisearchTest do
                uuid: 2,
                title: "Superbat",
                director: "Rico",
-               genres: ["commedy", "polar"]
+               genres: ["comedy", "polar"]
              })
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
@@ -348,7 +348,7 @@ defmodule MeilisearchTest do
              |> Meilisearch.client()
              |> Meilisearch.Document.create_or_replace("books", [
                %Book{uuid: 1, title: "FlatmanB", author: "RobertoB", genres: ["sf", "drama"]},
-               %Book{uuid: 2, title: "SuperbatB", author: "RicoB", genres: ["commedy", "polar"]}
+               %Book{uuid: 2, title: "SuperbatB", author: "RicoB", genres: ["comedy", "polar"]}
              ])
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
@@ -403,7 +403,7 @@ defmodule MeilisearchTest do
                   "uuid" => 2,
                   "title" => "Superbat",
                   "director" => "Rico",
-                  "genres" => ["commedy", "polar"]
+                  "genres" => ["comedy", "polar"]
                 }
               ]
             }} =
@@ -461,7 +461,7 @@ defmodule MeilisearchTest do
                       "uuid" => 2,
                       "title" => "SuperbatB",
                       "author" => "RicoB",
-                      "genres" => ["commedy", "polar"]
+                      "genres" => ["comedy", "polar"]
                     }
                   ]
                 },
@@ -479,7 +479,7 @@ defmodule MeilisearchTest do
                       "uuid" => 2,
                       "title" => "Superbat",
                       "director" => "Rico",
-                      "genres" => ["commedy", "polar"]
+                      "genres" => ["comedy", "polar"]
                     }
                   ]
                 }
@@ -540,7 +540,7 @@ defmodule MeilisearchTest do
                   "uuid" => 2,
                   "title" => "Superbat",
                   "director" => "Rico",
-                  "genres" => ["commedy", "polar"]
+                  "genres" => ["comedy", "polar"]
                 }
               ]
             }} =
@@ -553,7 +553,7 @@ defmodule MeilisearchTest do
               "uuid" => 2,
               "title" => "Superbat",
               "director" => "Rico",
-              "genres" => ["commedy", "polar"]
+              "genres" => ["comedy", "polar"]
             }} =
              :main
              |> Meilisearch.client()
@@ -596,7 +596,7 @@ defmodule MeilisearchTest do
              |> Meilisearch.client()
              |> Meilisearch.Document.create_or_update("movies", [
                %Movie{uuid: 1, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]},
-               %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["commedy", "polar"]}
+               %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["comedy", "polar"]}
              ])
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
@@ -614,7 +614,7 @@ defmodule MeilisearchTest do
                uuid: 2,
                title: "Superbat",
                director: "Rico",
-               genres: ["commedy", "polar"]
+               genres: ["comedy", "polar"]
              })
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
@@ -942,7 +942,7 @@ defmodule MeilisearchTest do
             }} =
              :main
              |> Meilisearch.client()
-             |> Meilisearch.Settings.TypeTolerence.update("movies", %{
+             |> Meilisearch.Settings.TypeTolerance.update("movies", %{
                enabled: true,
                minWordSizeForTypos: %{
                  oneTypo: 6,
@@ -966,7 +966,7 @@ defmodule MeilisearchTest do
             }} =
              :main
              |> Meilisearch.client()
-             |> Meilisearch.Settings.TypeTolerence.get("movies")
+             |> Meilisearch.Settings.TypeTolerance.get("movies")
 
     assert {:ok,
             %Meilisearch.SummarizedTask{
@@ -977,7 +977,7 @@ defmodule MeilisearchTest do
             }} =
              :main
              |> Meilisearch.client()
-             |> Meilisearch.Settings.TypeTolerence.reset("movies")
+             |> Meilisearch.Settings.TypeTolerance.reset("movies")
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
@@ -993,7 +993,7 @@ defmodule MeilisearchTest do
             }} =
              :main
              |> Meilisearch.client()
-             |> Meilisearch.Settings.TypeTolerence.get("movies")
+             |> Meilisearch.Settings.TypeTolerance.get("movies")
 
     # -- next settings
     assert {:ok,

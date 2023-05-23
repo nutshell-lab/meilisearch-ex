@@ -1,7 +1,7 @@
 defmodule Meilisearch.Key do
   @moduledoc """
   Manipulate Meilisearch api keys.
-  [Key API](https://docs.meilisearch.com/references/keys.html)
+  [Key API](https://docs.meilisearch.com/reference/api/keys.html)
   """
 
   use TypedEctoSchema
