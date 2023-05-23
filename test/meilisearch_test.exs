@@ -6,9 +6,13 @@ defmodule MeilisearchTest do
     defstruct [:uuid, :title, :director, :genres]
   end
 
+  defmodule Book do
+    defstruct [:uuid, :title, :author, :genres]
+  end
+
   setup do
     # Used in CI to test multiple versions of Meilisearch
-    version = System.get_env("MEILI", "1.0.2")
+    version = System.get_env("MEILI", "1.1.1")
     image = "getmeili/meilisearch:v#{version}"
     key = "master_key_test"
 
@@ -225,6 +229,19 @@ defmodule MeilisearchTest do
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "books",
+              status: :enqueued,
+              type: :indexCreation
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Index.create(%{uid: "books", primaryKey: "uuid"})
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
     # Index should be created
     assert {:ok,
             %Meilisearch.Index{
@@ -240,13 +257,17 @@ defmodule MeilisearchTest do
             %Meilisearch.Pagination{
               results: [
                 %{
+                  uid: "books",
+                  primaryKey: "uuid"
+                },
+                %{
                   uid: "movies",
                   primaryKey: "id"
                 }
               ],
               offset: 0,
               limit: 20,
-              total: 1
+              total: 2
             }} =
              :main
              |> Meilisearch.client()
@@ -311,6 +332,24 @@ defmodule MeilisearchTest do
                director: "Rico",
                genres: ["commedy", "polar"]
              })
+
+    assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+    Protocol.derive(Jason.Encoder, Book)
+
+    assert {:ok,
+            %Meilisearch.SummarizedTask{
+              taskUid: task,
+              indexUid: "books",
+              status: :enqueued,
+              type: :documentAdditionOrUpdate
+            }} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.Document.create_or_replace("books", [
+               %Book{uuid: 1, title: "FlatmanB", author: "RobertoB", genres: ["sf", "drama"]},
+               %Book{uuid: 2, title: "SuperbatB", author: "RicoB", genres: ["commedy", "polar"]}
+             ])
 
     assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
 
@@ -403,6 +442,84 @@ defmodule MeilisearchTest do
              :main
              |> Meilisearch.client()
              |> Meilisearch.Search.search("movies", q: "flat", limit: 1)
+
+    # Let's multi-search
+    assert {:ok,
+            [
+              %Meilisearch.MultiSearch{
+                indexUid: "books",
+                query: nil,
+                hits: [
+                  %{
+                    "uuid" => 1,
+                    "title" => "FlatmanB",
+                    "author" => "RobertoB",
+                    "genres" => ["sf", "drama"]
+                  },
+                  %{
+                    "uuid" => 2,
+                    "title" => "SuperbatB",
+                    "author" => "RicoB",
+                    "genres" => ["commedy", "polar"]
+                  }
+                ]
+              },
+              %Meilisearch.MultiSearch{
+                indexUid: "movies",
+                query: nil,
+                hits: [
+                  %{
+                    "uuid" => 1,
+                    "title" => "Flatman",
+                    "director" => "Roberto",
+                    "genres" => ["sf", "drama"]
+                  },
+                  %{
+                    "uuid" => 2,
+                    "title" => "Superbat",
+                    "director" => "Rico",
+                    "genres" => ["commedy", "polar"]
+                  }
+                ]
+              }
+            ]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.MultiSearch.multi_search(%{"books" => [], "movies" => []})
+
+    assert {:ok,
+            [
+              %Meilisearch.MultiSearch{
+                indexUid: "books",
+                query: "flat",
+                hits: [
+                  %{
+                    "uuid" => 1,
+                    "title" => "FlatmanB",
+                    "author" => "RobertoB",
+                    "genres" => ["sf", "drama"]
+                  }
+                ]
+              },
+              %Meilisearch.MultiSearch{
+                indexUid: "movies",
+                query: "flat",
+                hits: [
+                  %{
+                    "uuid" => 1,
+                    "title" => "Flatman",
+                    "director" => "Roberto",
+                    "genres" => ["sf", "drama"]
+                  }
+                ]
+              }
+            ]} =
+             :main
+             |> Meilisearch.client()
+             |> Meilisearch.MultiSearch.multi_search(%{
+               "books" => [q: "flat"],
+               "movies" => [q: "flat"]
+             })
 
     # Let's list all our documents
     assert {:ok,
