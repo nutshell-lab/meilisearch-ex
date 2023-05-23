@@ -3,11 +3,11 @@ defmodule MeilisearchTest do
   import Excontainers.ExUnit
 
   defmodule Movie do
-    defstruct [:uuid, :title, :director, :genres]
+    defstruct [:uuid, :title, :director, :genres, :rating]
   end
 
   defmodule Book do
-    defstruct [:uuid, :title, :author, :genres]
+    defstruct [:uuid, :title, :author, :genres, :rating]
   end
 
   setup do
@@ -318,8 +318,20 @@ defmodule MeilisearchTest do
                :main
                |> Meilisearch.client()
                |> Meilisearch.Document.create_or_replace("movies", [
-                 %Movie{uuid: 1, title: "Flatman", director: "Roberto", genres: ["sf", "drama"]},
-                 %Movie{uuid: 2, title: "Superbat", director: "Rico", genres: ["comedy", "polar"]}
+                 %Movie{
+                   uuid: 1,
+                   title: "Flatman",
+                   director: "Roberto",
+                   genres: ["sf", "drama"],
+                   rating: 4
+                 },
+                 %Movie{
+                   uuid: 2,
+                   title: "Superbat",
+                   director: "Rico",
+                   genres: ["comedy", "polar"],
+                   rating: 5
+                 }
                ])
 
       assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
@@ -354,8 +366,20 @@ defmodule MeilisearchTest do
                :main
                |> Meilisearch.client()
                |> Meilisearch.Document.create_or_replace("books", [
-                 %Book{uuid: 1, title: "FlatmanB", author: "RobertoB", genres: ["sf", "drama"]},
-                 %Book{uuid: 2, title: "SuperbatB", author: "RicoB", genres: ["comedy", "polar"]}
+                 %Book{
+                   uuid: 1,
+                   title: "FlatmanB",
+                   author: "RobertoB",
+                   genres: ["sf", "drama"],
+                   rating: 2
+                 },
+                 %Book{
+                   uuid: 2,
+                   title: "SuperbatB",
+                   author: "RicoB",
+                   genres: ["comedy", "polar"],
+                   rating: 3
+                 }
                ])
 
       assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
@@ -395,6 +419,39 @@ defmodule MeilisearchTest do
                |> Meilisearch.client()
                |> Meilisearch.Stats.all()
 
+      # Let's prep the indexes for searching via facets
+      assert {:ok,
+              %Meilisearch.SummarizedTask{
+                taskUid: task,
+                indexUid: "movies",
+                status: :enqueued,
+                type: :settingsUpdate
+              }} =
+               :main
+               |> Meilisearch.client()
+               |> Meilisearch.Settings.FilterableAttributes.update("movies", [
+                 "genres",
+                 "rating"
+               ])
+
+      assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
+      assert {:ok,
+              %Meilisearch.SummarizedTask{
+                taskUid: task,
+                indexUid: "books",
+                status: :enqueued,
+                type: :settingsUpdate
+              }} =
+               :main
+               |> Meilisearch.client()
+               |> Meilisearch.Settings.FilterableAttributes.update("books", [
+                 "genres",
+                 "rating"
+               ])
+
+      assert :succeeded = wait_for_task(Meilisearch.client(:main), task)
+
       # Let's search
       assert {:ok,
               %Meilisearch.Search{
@@ -428,11 +485,16 @@ defmodule MeilisearchTest do
                     "director" => "Roberto",
                     "genres" => ["sf", "drama"]
                   }
-                ]
+                ],
+                facetDistribution: %{
+                  "genres" => %{"drama" => 1, "sf" => 1},
+                  "rating" => %{"4" => 1}
+                },
+                facetStats: %{"rating" => %{"max" => 4.0, "min" => 4.0}}
               }} =
                :main
                |> Meilisearch.client()
-               |> Meilisearch.Search.search("movies", %{q: "flat"})
+               |> Meilisearch.Search.search("movies", %{q: "flat", facets: ["genres", "rating"]})
 
       assert {:ok,
               %Meilisearch.Search{
@@ -507,7 +569,9 @@ defmodule MeilisearchTest do
                         "author" => "RobertoB",
                         "genres" => ["sf", "drama"]
                       }
-                    ]
+                    ],
+                    facetDistribution: %{"rating" => %{"2" => 1}},
+                    facetStats: %{"rating" => %{"max" => 2.0, "min" => 2.0}}
                   },
                   %Meilisearch.MultiSearch{
                     indexUid: "movies",
@@ -525,7 +589,7 @@ defmodule MeilisearchTest do
                  :main
                  |> Meilisearch.client()
                  |> Meilisearch.MultiSearch.multi_search(%{
-                   "books" => [q: "flat"],
+                   "books" => [q: "flat", facets: ["rating"]],
                    "movies" => [q: "flat"]
                  })
       end
@@ -644,7 +708,7 @@ defmodule MeilisearchTest do
               %Meilisearch.Settings{
                 displayedAttributes: ["*"],
                 searchableAttributes: ["*"],
-                filterableAttributes: [],
+                filterableAttributes: ["genres", "rating"],
                 sortableAttributes: [],
                 rankingRules: ["words", "typo", "proximity", "attribute", "sort", "exactness"],
                 stopWords: [],

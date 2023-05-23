@@ -16,6 +16,7 @@ defmodule Meilisearch.Search do
     field(:hitsPerPage, :integer)
     field(:page, :integer)
     field(:facetDistribution, :map)
+    field(:facetStats, :map)
     field(:processingTimeMs, :integer)
     field(:query, :string)
   end
@@ -30,6 +31,7 @@ defmodule Meilisearch.Search do
           hitsPerPage: integer(),
           page: integer(),
           facetDistribution: map(),
+          facetStats: map(),
           processingTimeMs: integer(),
           query: String.t()
         }
@@ -46,6 +48,7 @@ defmodule Meilisearch.Search do
       :hitsPerPage,
       :page,
       :facetDistribution,
+      :facetStats,
       :processingTimeMs,
       :query
     ])
