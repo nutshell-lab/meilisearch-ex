@@ -19,7 +19,7 @@ The package can be installed by adding `meilisearch_ex` to your list of dependen
 def deps do
   [
     {:finch, "~> 0.14.0"},
-    {:meilisearch_ex, "~> 1.0.1"}
+    {:meilisearch_ex, "~> 1.1.0"}
   ]
 end
 ```
@@ -108,4 +108,5 @@ For now, we only support version `1.0.x` of Meilisearch.
 |  meilisearch  | meilisearch-ex |
 | ------------- | ------------- |
 |     1.0.x     |      1.0      |
+|     1.1.x     |      1.1      |
 
