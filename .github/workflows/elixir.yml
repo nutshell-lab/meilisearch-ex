@@ -34,5 +34,7 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-
       - name: Install dependencies
         run: mix deps.get
+      - name: Lint checks
+        run: mix credo
       - name: Run tests with coverage
         run: mix coveralls.github

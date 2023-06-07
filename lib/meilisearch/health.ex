@@ -1,7 +1,7 @@
 defmodule Meilisearch.Health do
   @moduledoc """
   Retreive Meilisearch health status.
-  [Health API](https://docs.meilisearch.com/reference/api/health.html)
+  [Health API](https://www.meilisearch.com/docs/reference/api/health)
   """
 
   use TypedEctoSchema
@@ -19,7 +19,7 @@ defmodule Meilisearch.Health do
 
   @doc """
   Get a response from the /health endpoint of Meilisearch.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/health.html#get-health)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/health#get-health)
 
   ## Examples
 
@@ -40,7 +40,7 @@ defmodule Meilisearch.Health do
 
   @doc """
   Check the response from the /health endpoint of Meilisearch.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/health.html#get-health)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/health#get-health)
 
   ## Examples
 

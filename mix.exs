@@ -64,7 +64,8 @@ defmodule Meilisearch.MixProject do
       {:typed_ecto_schema, "~> 0.4.1", runtime: false},
       {:excontainers, "~> 0.3.0", only: [:dev, :test]},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 

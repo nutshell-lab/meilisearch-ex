@@ -1,7 +1,7 @@
 defmodule Meilisearch.Index do
   @moduledoc """
   Manipulate Meilisearch indexes.
-  [Index API](https://docs.meilisearch.com/reference/api/indexes.html)
+  [Index API](https://www.meilisearch.com/docs/reference/api/indexes)
   """
 
   use TypedEctoSchema
@@ -24,7 +24,7 @@ defmodule Meilisearch.Index do
 
   @doc """
   List indexes of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#index-object)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/indexes#index-object)
 
   ## Examples
 
@@ -52,7 +52,7 @@ defmodule Meilisearch.Index do
 
   @doc """
   Get an Index of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#get-one-index)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/indexes#get-one-index)
 
   ## Examples
 
@@ -79,7 +79,7 @@ defmodule Meilisearch.Index do
 
   @doc """
   Create a new Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#create-an-index)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/indexes#create-an-index)
 
   ## Examples
 
@@ -107,7 +107,7 @@ defmodule Meilisearch.Index do
 
   @doc """
   Update an existing Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#update-an-index)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/indexes#update-an-index)
 
   ## Examples
 
@@ -137,7 +137,7 @@ defmodule Meilisearch.Index do
 
   @doc """
   Delete an existing Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#delete-an-index)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/indexes#delete-an-index)
 
   ## Examples
 
@@ -165,7 +165,7 @@ defmodule Meilisearch.Index do
 
   @doc """
   Create a new Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#create-an-index)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/indexes#swap-indexes)
 
   ## Examples
 

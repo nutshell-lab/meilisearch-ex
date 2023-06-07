@@ -1,7 +1,7 @@
 defmodule Meilisearch.Task do
   @moduledoc """
   Manipulate Meilisearch tasks.
-  [Task API](https://docs.meilisearch.com/reference/api/tasks.html)
+  [Task API](https://www.meilisearch.com/docs/reference/api/tasks)
   """
 
   use TypedEctoSchema
@@ -70,7 +70,7 @@ defmodule Meilisearch.Task do
 
   @doc """
   List tasks of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/tasks.html#get-tasks)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/tasks#get-tasks)
 
   ## Examples
 
@@ -113,7 +113,7 @@ defmodule Meilisearch.Task do
 
   @doc """
   Get an Task of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/tasks.html#get-one-task)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/tasks#get-one-task)
 
   ## Examples
 
@@ -156,7 +156,7 @@ defmodule Meilisearch.Task do
 
   @doc """
   Cancel tasks of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/tasks.html#cancel-tasks)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/tasks#cancel-tasks)
 
   ## Examples
 
@@ -196,7 +196,7 @@ defmodule Meilisearch.Task do
 
   @doc """
   Delete tasks of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/tasks.html#delete-tasks)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/tasks#delete-tasks)
 
   ## Examples
 

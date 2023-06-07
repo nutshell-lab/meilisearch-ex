@@ -2,7 +2,7 @@ defmodule Meilisearch.Document do
   @moduledoc """
   Manipulate Meilisearch documents.
   Documents are not parsed into anything and are returned as plain maps with string keys.
-  [Document API](https://docs.meilisearch.com/reference/api/documents.html)
+  [Document API](https://www.meilisearch.com/docs/reference/api/documents)
   """
 
   @type t() :: map()
@@ -10,7 +10,7 @@ defmodule Meilisearch.Document do
 
   @doc """
   List Documents of an Index of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#get-documents)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/documents#get-documents-with-get)
 
   ## Examples
 
@@ -43,7 +43,7 @@ defmodule Meilisearch.Document do
 
   @doc """
   Get an Document of an Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#get-one-document)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/documents#get-one-document)
 
   ## Examples
 
@@ -67,7 +67,7 @@ defmodule Meilisearch.Document do
 
   @doc """
   Create or update a Documents into an Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/documents#add-or-replace-documents)
 
   ## Examples
 
@@ -100,7 +100,7 @@ defmodule Meilisearch.Document do
 
   @doc """
   Create or update a Documents into an Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/documents#add-or-update-documents)
 
   ## Examples
 
@@ -133,7 +133,7 @@ defmodule Meilisearch.Document do
 
   @doc """
   Delete all Documents of an Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#delete-all-documents)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/documents#delete-all-documents)
 
   ## Examples
 
@@ -163,7 +163,7 @@ defmodule Meilisearch.Document do
 
   @doc """
   Delete one Documents of an Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#delete-one-document)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/documents#delete-one-document)
 
   ## Examples
 
@@ -193,7 +193,7 @@ defmodule Meilisearch.Document do
 
   @doc """
   Delete a batch of Documents of an Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/documents.html#delete-documents-by-batch)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/documents#delete-documents-by-batch)
 
   ## Examples
 

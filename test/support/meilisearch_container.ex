@@ -3,8 +3,8 @@ defmodule MeilisearchTest.MeiliContainer do
   Functions to build and interact with Redis containers.
   """
 
-  alias Excontainers.Container
   alias Docker.CommandWaitStrategy
+  alias Excontainers.Container
 
   @port 7700
 
@@ -32,7 +32,7 @@ defmodule MeilisearchTest.MeiliContainer do
   """
   def connection_url(pid), do: "http://localhost:#{port(pid)}/"
 
-  defp wait_strategy() do
+  defp wait_strategy do
     CommandWaitStrategy.new([
       "sh",
       "-c",

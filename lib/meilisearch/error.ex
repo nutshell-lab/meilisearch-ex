@@ -1,7 +1,7 @@
 defmodule Meilisearch.Error do
   @moduledoc """
   Represents a Meilisearch error.
-  [Errors](https://docs.meilisearch.com/reference/errors/overview.html)
+  [Errors](https://www.meilisearch.com/docs/reference/errors/overview)
   """
 
   use TypedEctoSchema
@@ -20,6 +20,7 @@ defmodule Meilisearch.Error do
       ]
     )
 
+    # see https://www.meilisearch.com/docs/reference/errors/error_codes
     field(:code, Ecto.Enum,
       values: [
         :api_key_already_exists,

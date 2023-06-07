@@ -1,12 +1,12 @@
 defmodule Meilisearch.Dump do
   @moduledoc """
   Manipulate Meilisearch dumps.
-  [Dumps API](https://docs.meilisearch.com/reference/api/dump.html)
+  [Dumps API](https://www.meilisearch.com/docs/reference/api/dump)
   """
 
   @doc """
   Trigger a dump creation in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/dump.html#create-a-dump)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/dump#create-a-dump)
 
   ## Examples
 

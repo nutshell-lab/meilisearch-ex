@@ -1,7 +1,7 @@
 defmodule Meilisearch.MultiSearch do
   @moduledoc """
   Search into your Meilisearch indexes.
-  [Multi-Search API](https://docs.meilisearch.com/reference/api/multi_search.html)
+  [Multi-Search API](https://www.meilisearch.com/docs/reference/api/multi_search)
   """
 
   use Ecto.Schema
@@ -85,6 +85,9 @@ defmodule Meilisearch.MultiSearch do
         }
 
   @doc """
+  Bundle multiple search queries in a single API request. Use this endpoint to search through multiple indexes at once.
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/multi_search#perform-a-multi-search)
+
   ## Examples
 
       iex> client = Meilisearch.Client.new(endpoint: "http://localhost:7700", key: "master_key_test")

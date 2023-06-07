@@ -1,4 +1,9 @@
 defmodule Meilisearch.Settings do
+  @moduledoc """
+  Customize settings for your Meilisearch indexes.
+  [Search API](https://www.meilisearch.com/docs/reference/api/settings)
+  """
+
   use TypedEctoSchema
 
   @primary_key false
@@ -124,6 +129,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule DisplayedAttributes do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#displayed-attributes)
+    """
+
     @doc """
     Get displayed attributes settings of an Index of your Meilisearch instance.
     [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-displayed-attributes)
@@ -207,6 +216,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule SearchableAttributes do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#searchable-attributes)
+    """
+
     @doc """
     Get searchable attributes settings of an Index of your Meilisearch instance.
     [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-searchable-attributes)
@@ -290,6 +303,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule FilterableAttributes do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#filterable-attributes)
+    """
+
     @doc """
     Get filterable attributes settings of an Index of your Meilisearch instance.
     [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-filterable-attributes)
@@ -373,6 +390,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule SortableAttributes do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#sortable-attributes)
+    """
+
     @doc """
     Get sortable attributes settings of an Index of your Meilisearch instance.
     [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-sortable-attributes)
@@ -456,6 +477,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule RankingRules do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#ranking-rules)
+    """
+
     @doc """
     Get ranking rules settings of an Index of your Meilisearch instance.
     [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-ranking-rules)
@@ -539,6 +564,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule StopWords do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#stop-words)
+    """
+
     @doc """
     Get stop words settings of an Index of your Meilisearch instance.
     [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-stop-words)
@@ -622,6 +651,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule Synonyms do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#synonyms)
+    """
+
     @doc """
     Get synonyms settings of an Index of your Meilisearch instance.
     [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-synonyms)
@@ -713,6 +746,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule DistinctAttributes do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#distinct-attribute)
+    """
+
     @doc """
     Get distinct attribute settings of an Index of your Meilisearch instance.
     [Meilisearch documentation](https://docs.meilisearch.com/reference/api/settings.html#get-distinct-attribute)
@@ -799,6 +836,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule Faceting do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#faceting-object)
+    """
+
     use TypedEctoSchema
 
     @primary_key false
@@ -901,6 +942,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule Pagination do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#pagination-object)
+    """
+
     use TypedEctoSchema
 
     @primary_key false
@@ -1003,6 +1048,10 @@ defmodule Meilisearch.Settings do
   end
 
   defmodule TypeTolerance do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/settings#typo-tolerance-object)
+    """
+
     use TypedEctoSchema
 
     @primary_key false
@@ -1126,6 +1175,10 @@ defmodule Meilisearch.Settings do
     end
 
     defmodule MinWordSizesForTypos do
+      @moduledoc """
+      see [documentation](https://www.meilisearch.com/docs/reference/api/settings#typo-tolerance-object)
+      """
+
       use TypedEctoSchema
 
       @primary_key false

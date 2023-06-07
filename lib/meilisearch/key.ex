@@ -1,7 +1,7 @@
 defmodule Meilisearch.Key do
   @moduledoc """
   Manipulate Meilisearch api keys.
-  [Key API](https://docs.meilisearch.com/reference/api/keys.html)
+  [Key API](https://www.meilisearch.com/docs/reference/api/keys)
   """
 
   use TypedEctoSchema
@@ -39,7 +39,7 @@ defmodule Meilisearch.Key do
 
   @doc """
   List keys of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/keys.html#get-all-keys)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/keys#get-all-keys)
 
   ## Examples
 
@@ -72,7 +72,7 @@ defmodule Meilisearch.Key do
 
   @doc """
   Get a Key of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/keys.html#get-one-key)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/keys#get-one-key)
 
   ## Examples
 
@@ -104,7 +104,7 @@ defmodule Meilisearch.Key do
 
   @doc """
   Create a new Key in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/keys.html#create-a-key)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/keys#create-a-key)
 
   ## Examples
 
@@ -143,7 +143,7 @@ defmodule Meilisearch.Key do
 
   @doc """
   Update an existing Key in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/keys.html#update-a-key)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/keys#update-a-key)
 
   ## Examples
 
@@ -178,7 +178,7 @@ defmodule Meilisearch.Key do
 
   @doc """
   Delete an existing Index in your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#delete-an-index)
+  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/indexes.html#delete-a-key)
 
   ## Examples
 

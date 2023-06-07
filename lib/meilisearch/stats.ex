@@ -1,7 +1,7 @@
 defmodule Meilisearch.Stats do
   @moduledoc """
   Get Stats about your Meilisearch indexes.
-  [Key API](https://docs.meilisearch.com/reference/api/stats.html)
+  [Key API](https://www.meilisearch.com/docs/reference/api/stats)
   """
 
   use TypedEctoSchema
@@ -32,7 +32,7 @@ defmodule Meilisearch.Stats do
 
   @doc """
   Get stats about all indexes of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/stats.html#get-stats-of-all-indexes)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/stats#get-stats-of-all-indexes)
 
   ## Examples
 
@@ -82,7 +82,7 @@ defmodule Meilisearch.Stats do
 
   @doc """
   Get stats about a specific index of your Meilisearch instance.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/stats.html#get-stats-of-an-index)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/stats#get-stats-of-an-index)
 
   ## Examples
 
@@ -113,6 +113,10 @@ defmodule Meilisearch.Stats do
   end
 
   defmodule Stat do
+    @moduledoc """
+    see [documentation](https://www.meilisearch.com/docs/reference/api/stats#stats-object)
+    """
+
     use TypedEctoSchema
 
     @primary_key false

@@ -11,14 +11,14 @@ defmodule MeilisearchTest.Casting.Stats do
              lastUpdate: ~U[2019-11-15 11:15:22Z],
              indexes: %{
                "movies" => %{
-                 numberOfDocuments: 19654,
+                 numberOfDocuments: 19_654,
                  isIndexing: false,
                  fieldDistribution: %{
-                   "poster" => 19654,
-                   "overview" => 19654,
-                   "title" => 19654,
-                   "id" => 19654,
-                   "release_date" => 19654
+                   "poster" => 19_654,
+                   "overview" => 19_654,
+                   "title" => 19_654,
+                   "id" => 19_654,
+                   "release_date" => 19_654
                  }
                },
                "books" => %{

@@ -1,7 +1,7 @@
 defmodule Meilisearch.Version do
   @moduledoc """
   Retreive Meilisearch version.
-  [Version API](https://docs.meilisearch.com/reference/api/version.html)
+  [Version API](https://www.meilisearch.com/docs/reference/api/version)
   """
 
   use TypedEctoSchema
@@ -21,7 +21,7 @@ defmodule Meilisearch.Version do
 
   @doc """
   Get a response from the /version endpoint of Meilisearch.
-  [Meilisearch documentation](https://docs.meilisearch.com/reference/api/version.html#get-version-of-meilisearch)
+  [Meilisearch documentation](https://www.meilisearch.com/docs/reference/api/version#get-version-of-meilisearch)
 
   ## Examples
 

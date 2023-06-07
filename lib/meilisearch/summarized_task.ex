@@ -1,7 +1,7 @@
 defmodule Meilisearch.SummarizedTask do
   @moduledoc """
   Manipulate Meilisearch tasks.
-  [Task API](https://docs.meilisearch.com/reference/api/tasks.html#summarized-task-object)
+  [Task API](https://www.meilisearch.com/docs/reference/api/tasks#summarized-task-object)
   """
 
   use TypedEctoSchema
