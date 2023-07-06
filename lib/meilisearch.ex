@@ -110,4 +110,6 @@ defmodule Meilisearch do
   def client(name) do
     GenServer.call(to_name(name), :client)
   end
+
+  def qualified_version, do: "Meilisearch Elixir (v#{Application.spec(:meilisearch_ex)[:vsn]})"
 end
