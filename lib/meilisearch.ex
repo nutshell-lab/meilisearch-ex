@@ -1,6 +1,4 @@
 defmodule Meilisearch do
-  @version "1.1.0"
-
   @moduledoc """
   A client for [MeiliSearch](https://meilisearch.com).
   The following Modules are provided for interacting with Meilisearch:
@@ -113,5 +111,5 @@ defmodule Meilisearch do
     GenServer.call(to_name(name), :client)
   end
 
-  def qualified_version, do: "Meilisearch Elixir (v#{@version})"
+  def qualified_version, do: "Meilisearch Elixir (v#{Application.spec(:meilisearch_ex)[:vsn]})"
 end
