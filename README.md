@@ -52,7 +52,7 @@ The package can be installed by adding `meilisearch_ex` to your list of dependen
 def deps do
   [
     {:finch, "~> 0.14.0"},
-    {:meilisearch_ex, "~> 1.1.0"}
+    {:meilisearch_ex, "~> 1.1.1"}
   ]
 end
 ```
