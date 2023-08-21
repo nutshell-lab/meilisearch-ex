@@ -27,6 +27,7 @@ defmodule Meilisearch.Client do
     log_level = Keyword.get(opts, :log_level, :warn)
     debug = Keyword.get(opts, :debug, false)
     finch = Keyword.get(opts, :finch)
+    tesla_adapter = Keyword.get(opts, :adapter, Tesla.Adapter.Finch)
 
     middleware = [
       {Tesla.Middleware.BaseUrl, endpoint},
@@ -40,7 +41,7 @@ defmodule Meilisearch.Client do
        log_level: log_level, debug: debug, filter_headers: ["authorization"]}
     ]
 
-    adapter = {Tesla.Adapter.Finch, name: finch, receive_timeout: 30_000}
+    adapter = {tesla_adapter, name: finch, receive_timeout: 30_000}
 
     Tesla.client(middleware, adapter)
   end

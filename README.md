@@ -139,6 +139,30 @@ defmodule MyApp.MyContext do
 end
 ```
 
+### Using another HTTP adapter
+
+Given that the HTTP client is backed by Tesla behind the scene, you can freely use another adapter if it is more suitable for you.
+
+```elixir
+def deps do
+  [
+    {:hackney, "~> 1.18"},
+    {:meilisearch_ex, "~> 1.1.1"}
+  ]
+end
+```
+```elixir
+
+# Create a Meilisearch client whenever and wherever you need it.
+[endpoint: "http://127.0.0.1:7700", key: "masterKey", adapter: Tesla.Adapter.Hackney]
+|> Meilisearch.Client.new()
+|> Meilisearch.Health.get()
+
+# %Meilisearch.Health{status: "available"}
+```
+
+
+
 ## 🎬 Getting started
 
 ### Add documents <!-- omit in toc -->
