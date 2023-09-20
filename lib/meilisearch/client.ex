@@ -24,7 +24,7 @@ defmodule Meilisearch.Client do
     endpoint = Keyword.get(opts, :endpoint, "")
     key = Keyword.get(opts, :key, "")
     timeout = Keyword.get(opts, :timeout, 2_000)
-    log_level = Keyword.get(opts, :log_level, :warn)
+    log_level = Keyword.get(opts, :log_level, nil)
     debug = Keyword.get(opts, :debug, false)
     finch = Keyword.get(opts, :finch)
     tesla_adapter = Keyword.get(opts, :adapter, Tesla.Adapter.Finch)
