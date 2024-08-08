@@ -127,6 +127,7 @@ defmodule Meilisearch.MultiSearch do
         ) ::
           {:ok, __MODULE__.t(Meilisearch.Document.t())}
           | {:error, Meilisearch.Client.error()}
+          | {:error, Meilisearch.Client.error(), non_neg_integer()}
   def multi_search(client, params \\ %{})
 
   def multi_search(client, params) when is_list(params),
