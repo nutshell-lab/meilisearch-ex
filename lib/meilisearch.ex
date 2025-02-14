@@ -82,7 +82,7 @@ defmodule Meilisearch do
     name = Keyword.fetch!(opts, :name)
 
     %{
-      id: name,
+      id: to_name(name),
       start: {__MODULE__, :start_link, [opts]}
     }
   end
