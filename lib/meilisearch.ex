@@ -78,7 +78,16 @@ defmodule Meilisearch do
 
   use GenServer
 
-  defp to_name(name), do: :"__MODULE__:#{name}"
+  def child_spec(opts) do
+    name = Keyword.fetch!(opts, :name)
+
+    %{
+      id: name,
+      start: {__MODULE__, :start_link, [opts]}
+    }
+  end
+
+  defp to_name(name), do: :"#{inspect(__MODULE__)}:#{name}"
 
   @spec start_link(atom(),
           endpoint: String.t(),
