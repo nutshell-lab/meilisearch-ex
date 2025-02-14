@@ -52,7 +52,7 @@ The package can be installed by adding `meilisearch_ex` to your list of dependen
 def deps do
   [
     {:finch, "~> 0.14.0"},
-    {:meilisearch_ex, "~> 1.2.0"}
+    {:meilisearch_ex, "~> 1.2.1"}
   ]
 end
 ```
@@ -147,7 +147,7 @@ Given that the HTTP client is backed by Tesla behind the scene, you can freely u
 def deps do
   [
     {:hackney, "~> 1.18"},
-    {:meilisearch_ex, "~> 1.2.0"}
+    {:meilisearch_ex, "~> 1.2.1"}
   ]
 end
 ```

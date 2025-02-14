@@ -1,7 +1,7 @@
 defmodule Meilisearch.MixProject do
   use Mix.Project
 
-  @version "1.2.0"
+  @version "1.2.1"
   @github_url "https://github.com/nutshell-lab/meilisearch-ex"
 
   def project do
