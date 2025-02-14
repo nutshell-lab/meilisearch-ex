@@ -134,6 +134,8 @@ defmodule Meilisearch.Error do
 
   def cast(data) when is_nil(data), do: nil
 
+  def cast(""), do: nil
+
   def cast(data) when is_map(data) do
     %__MODULE__{}
     |> Ecto.Changeset.cast(data, [:message, :link, :type, :code])
