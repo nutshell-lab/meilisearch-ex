@@ -35,7 +35,7 @@ defmodule Meilisearch.Client do
       Tesla.Middleware.PathParams,
       {Tesla.Middleware.BearerAuth, token: key},
       {Tesla.Middleware.Headers,
-       [{"Content-Type", "application/json"}, {"User-Agent", Meilisearch.qualified_version()}]},
+       [{"User-Agent", Meilisearch.qualified_version()}]},
       {Tesla.Middleware.Timeout, timeout: timeout},
       {Tesla.Middleware.Logger,
        log_level: log_level, debug: debug, filter_headers: ["authorization"]}
