@@ -34,8 +34,20 @@ defmodule Meilisearch.Client do
       Tesla.Middleware.JSON,
       Tesla.Middleware.PathParams,
       {Tesla.Middleware.BearerAuth, token: key},
-      {Tesla.Middleware.Headers,
-       [{"User-Agent", Meilisearch.qualified_version()}]},
+      {Tesla.Middleware.Headers, fn %{headers: headers} ->
+        user_agent_header = {"User-Agent", Meilisearch.qualified_version()}
+
+        headers = headers || []
+        content_type_exists = Enum.any?(headers, fn {header, value} ->
+          String.downcase(header) == "content-type" && String.contains?(String.downcase(value), "application/json")
+        end)
+
+        if content_type_exists do
+          [user_agent_header]
+        else
+          [user_agent_header, {"Content-Type", "application/json"}]
+        end
+      end},
       {Tesla.Middleware.Timeout, timeout: timeout},
       {Tesla.Middleware.Logger,
        log_level: log_level, debug: debug, filter_headers: ["authorization"]}
