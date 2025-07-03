@@ -48,6 +48,7 @@ defmodule Meilisearch.Client do
   @doc """
   Handles responses success and errors, returns it formatted.
   """
+  @spec handle_response(term()) :: {:ok, map()} | {:error, Meilisearch.Error.t(), integer()} | {:error, term()}
   def handle_response({:ok, %{status: status, body: body}})
       when status in 200..299 do
     {:ok, body}
