@@ -67,7 +67,7 @@ defmodule Meilisearch.Index do
 
   """
   @spec get(Tesla.Client.t(), String.t()) ::
-          {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
+          {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error(), integer()} | {:error, term()}
   def get(client, index_uid) do
     with {:ok, data} <-
            client
